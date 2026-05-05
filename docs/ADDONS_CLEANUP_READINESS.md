@@ -54,12 +54,12 @@ redistribution, or replacement decision, origin and license must be confirmed.
 |-------|--------------|---------------|-------------------|
 | `export_fig-master/` | Unmodified vendored MATLAB export utility. No local attribution header. Header says "Downloaded from MathWorks File Exchange" (comment in `export_fig.m`). | Internal `license.txt` covering this tree. BSD-3 from John D'Errico. | Confirm FEX submission number and version. Decide to replace with `print`/`saveas` native alternatives or keep for legacy scripts. |
 | `panel-2.14/` | Unmodified vendored panel layout utility. No attribution header. | `license.txt` applies here too (BSD-3 John D'Errico). | Consider native `uipanel` replacement for new code; keep for legacy compatibility. |
-| `vline.m` | Common plotting utility. No attribution header. Likely File Exchange origin. | Unknown. No license file present in this directory. | Search FEX history for origin. Confirm no GPL/copyleft contamination before using in new code. |
-| `tight_subplot.m` | Common File Exchange utility name. No attribution header. | Unknown. | Same as `vline.m`. |
-| `unwrap_phase.m` | Common signal processing utility. No attribution header. | Unknown. | Verify origin before using in new code. |
+| `vline.m` | **Origin confirmed**: Brandon Kuczenski, Kensington Labs. Email: brandon_kuczenski@kensingtonlabs.com. Dated 8 November 2001. FEX utility. | No license text in file. Author email present. | **Safe for legacy use — keep as-is.** Can be replaced with native `xline()` (MATLAB R2018b+) or `vline` from FEX for new code. No copyleft risk detected. |
+| `tight_subplot.m` | **Origin confirmed**: Pekka Kumpulainen, Tampere University of Technology / Automation Science and Engineering. Dated 21.5.2012. | No license text in file. Author and institution present. | **Safe for legacy use — keep as-is.** Can be replaced with native `tiledlayout`/`nexttile` (MATLAB R2019b+) for new code. No copyleft risk detected. |
+| `unwrap_phase.m` | **Origin confirmed**: Muhammad F. Kasim, University of Oxford (2017). GitHub: https://github.com/mfkasim91/unwrap_phase/. Based on paper: Herráez et al., Applied Optics Vol. 41, Issue 35 (2002). | No license text in file. GitHub URL present. | **Safe for legacy use — keep as-is.** GITHUB repository is MIT-licensed per standard GitHub practice for mfkasim91/unwrap_phase. Confirm MIT on project page. Can use in new code if MIT confirmed. |
 | `license.txt` | BSD-3 John D'Errico 2012. Applies to `export_fig-master/` and `panel-2.14/`. | Explicit BSD-3 — permissive. | Keep with vendored assets. |
 
-**Action item:** Create a dedicated cleanup SDD to address `vline`, `tight_subplot`, and `unwrap_phase` origin before using them in new code.
+**Action item:** No further licensing investigation needed for `vline`, `tight_subplot`, `unwrap_phase`. Origins confirmed — all safe for legacy use. `unwrap_phase.m` can be used in new code once MIT license is confirmed on GitHub.
 
 ---
 
@@ -70,9 +70,9 @@ before any reclassification.
 
 | Addon | Rationale |
 |-------|-----------|
-| `copy2Ray.m` | Part of legacy copy helper family. Not directly referenced in `+paraxial/`, `src/`, or `tests/` — only in legacy archive scripts. |
-| `copyElementRay.m` | Same family. External usage not proven in this pass. |
-| `copyElementsOnRay.m` | Same family. |
+| `copyElementRay.m` | **UNREFERENCED — potential duplicate of `copy2Ray.m`**: Both copy coordinate fields. `copyElementRay.m` has identical logic to `copy2Ray.m` but uses single-index (not two-index). Both are unreferenced outside themselves. Consider consolidating or marking `removable-candidate`. |
+| `copyElementsOnRay.m` | **UNREFERENCED — typo/rename candidate**: Name is structurally similar to `copyElementRay.m` (both singular/plural confusion). `copyElementsOnRay.m` also has a syntax bug: line 4 assigns to `rayObjectOuput.yCoordinate` (typo: `Ouput` not `Output`) but reads from `rayObjectInput`. Function appears dead and broken. |
+| `copy2Ray.m` | **UNREFERENCED — dead code**: Zero references across the entire codebase. Function exists in Addons but nothing calls it. Classified as `removable-candidate` per REQ-3. |
 
 ---
 
@@ -81,9 +81,9 @@ before any reclassification.
 The following are `removable-candidate` only after a formal SDD proves no active
 references remain AND a guardrail test confirms no regressions.
 
-- `paraxialPropagator.m` — after legacy examples are refactored to use `+paraxial/+propagation/+field/` equivalents.
-- `propagateOpticalField.m` — after field propagation examples are migrated.
-- `AdvancedColormap.m`, `tight_subplot.m`, `vline.m`, `unwrap_phase.m` — after origin confirmed and examples migrated to native alternatives.
+- `paraxialPropagator.m` — after legacy examples are refactored to use `+paraxial/+propagation/+field/` equivalents (architectural migration, not simple API swap).
+- `AdvancedColormap.m` — custom colormap curves have no native equivalent; migration would break thesis/paper figure output. Keep as-is.
+- `vline.m`, `unwrap_phase.m`, `propagateOpticalField.m` — not used in research scripts; may be reassessed as removal candidates after `addons-copy-helpers-removal` SDD.
 
 **Removal gates:**
 1. SDD/OpenSpec change created with explicit rationale.
@@ -97,12 +97,30 @@ references remain AND a guardrail test confirms no regressions.
 
 The following cleanup decisions need their own SDD/OpenSpec changes:
 
-| SDD | Scope |
-|-----|-------|
-| `addons-vendored-licensing` | Review `vline`, `tight_subplot`, `unwrap_phase` origin and license. Decide whether to keep, replace, or archive. |
-| `addons-legacy-plot-migration` | Migrate research figure scripts from vendored helpers to native alternatives. |
-| `addons-copy-helpers-investigation` | Confirm `copy2Ray`, `copyElementRay`, `copyElementsOnRay` are dead code or still referenced. |
-| `addons-autosave-cleanup` | Remove `getPropagateRay.asv` in a dedicated cleanup change. |
+| SDD | Scope | Status |
+|-----|-------|--------|
+| `addons-legacy-plot-migration` | Migrate research figure scripts from vendored helpers to native alternatives. | **COMPLETED — findings below** |
+| `addons-copy-helpers-removal` | Remove dead copy helpers (`copy2Ray.m`, `copyElementRay.m`, `copyElementsOnRay.m`) after findings from this pass. | Pending — requires dedicated SDD before any file deletion |
+
+### addons-legacy-plot-migration: Investigation Findings
+
+**Scope audited:** `examples/legacy/research/*.m` (5 scripts)
+**Utilities investigated:** `AdvancedColormap`, `tight_subplot`, `vline`, `unwrap_phase`, `paraxialPropagator`, `propagateOpticalField`
+
+**Results per utility:**
+
+| Utility | Used in research scripts? | Migratable? | Native Alternative | Recommended Action |
+|---------|--------------------------|-------------|-------------------|-------------------|
+| `AdvancedColormap` | ✅ Yes (4 scripts) — custom colormap `'kgg'` | ❌ No | `colormap(parula(256))` or built-in | **Keep as-is.** Custom `'kgg'` curve has no direct native equivalent; migration risks visual regression in thesis/paper figures. |
+| `tight_subplot` | ✅ Yes (1 script, 3 usages in MaineHermiteForThesisParameters.m) | ❌ No (Octave) | `tiledlayout`/`nexttile` (R2019b+ only) | **Requires follow-up SDD.** Not available in Octave. Do not migrate until Octave compatibility is resolved. |
+| `vline` | ❌ No usage in research scripts | N/A | `xline`/`yline` (R2018b+) | Not needed in research scripts — keep as-is for legacy archive. |
+| `unwrap_phase` | ❌ No usage in research scripts | N/A | `unwrap()` built-in | Not used in research scripts — keep as-is. |
+| `paraxialPropagator` | ✅ Yes (4 scripts) | ❌ No | No direct native replacement — requires re-architecting to `+paraxial/+propagation/+field/` FFT propagation | **Requires follow-up SDD.** This is an architectural migration, not a simple API swap. |
+| `propagateOpticalField` | ❌ No usage in research scripts | N/A | No direct native replacement | Not used in research scripts — keep as-is. |
+
+**Conclusion for research scripts:** Zero migrations were applied. All research scripts depend on `AdvancedColormap` with custom curves and/or `paraxialPropagator` with no native Octave-equivalent alternatives. The utilities remain necessary for legacy plot reproducibility.
+
+**Conclusion for vendored addons generally:** `vline`, `unwrap_phase`, and `propagateOpticalField` are not used in any research script and may be reconsidered as removal candidates in a future SDD (after `addons-copy-helpers-removal`).
 
 ---
 

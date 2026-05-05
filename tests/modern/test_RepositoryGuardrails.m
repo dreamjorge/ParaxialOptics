@@ -277,6 +277,25 @@ end
 fprintf('\n=== Repository Guardrails: %d/%d passed ===\n', passed, passed + failed);
 
 % -------------------------------------------------------------------------
+% No autosave artifacts in ParaxialBeams/Addons/ (recursive scan)
+% -------------------------------------------------------------------------
+addonsDir = fullfile(repoRoot, 'ParaxialBeams', 'Addons');
+% Recursively scan all subdirectories within Addons to catch nested autosave files
+allEntries = dir(fullfile(addonsDir, '**', '*.asv'));
+asvFiles = {allEntries.name};
+
+if isempty(asvFiles)
+    fprintf('  PASS: no .asv autosave artifacts in ParaxialBeams/Addons/\n');
+    passed = passed + 1;
+else
+    fprintf('  FAIL: .asv autosave artifacts found in ParaxialBeams/Addons/:\n');
+    for i = 1:numel(asvFiles)
+        fprintf('    - %s\n', asvFiles{i});
+    end
+    failed = failed + 1;
+end
+
+% -------------------------------------------------------------------------
 % Addons cleanup readiness gates
 % -------------------------------------------------------------------------
 readinessPath = fullfile(repoRoot, 'docs', 'ADDONS_CLEANUP_READINESS.md');
