@@ -277,12 +277,12 @@ end
 fprintf('\n=== Repository Guardrails: %d/%d passed ===\n', passed, passed + failed);
 
 % -------------------------------------------------------------------------
-% No autosave artifacts in ParaxialBeams/Addons/
+% No autosave artifacts in ParaxialBeams/Addons/ (recursive scan)
 % -------------------------------------------------------------------------
 addonsDir = fullfile(repoRoot, 'ParaxialBeams', 'Addons');
-addonEntries = dir(addonsDir);
-asvFiles = {addonEntries(~[addonEntries.isdir]).name};
-asvFiles = asvFiles(cellfun(@(x) length(x) > 4 && strcmp(x(end-3:end), '.asv'), asvFiles));
+% Recursively scan all subdirectories within Addons to catch nested autosave files
+allEntries = dir(fullfile(addonsDir, '**', '*.asv'));
+asvFiles = {allEntries.name};
 
 if isempty(asvFiles)
     fprintf('  PASS: no .asv autosave artifacts in ParaxialBeams/Addons/\n');
