@@ -8,11 +8,14 @@ classdef HermiteComputation
     %
     % Usage:
     %   [HG, NHG] = HermiteComputation.hermiteSolutions(nu, x)
+    %   NHG = HermiteComputation.hermiteSecondSolution(n, x)
     %
     % Notes:
     %   The hermiteSolutions algorithm computes two independent series solutions
-    %   (HG, NHG) of the Hermite differential equation. These are used by
-    %   Hankel-Hermite beam constructions in research scripts.
+    %   (HG, NHG) of the Hermite differential equation:
+    %     HG  = first independent solution (physicist's H_n standard Hermite polynomial)
+    %     NHG = second independent solution (normalized partner, orthogonal to HG)
+    %   These are used by Hankel-Hermite beam constructions in research scripts.
 
     methods (Static)
 
@@ -27,8 +30,8 @@ classdef HermiteComputation
             %   x   - evaluation point(s), scalar or vector
             %
             % Output:
-            %   HG   - "standard" Hermite function
-            %   NHG  - "normalized" Hermite function (orthogonal partner)
+            %   HG   - first independent solution (physicist's H_n)
+            %   NHG  - second independent solution (normalized partner, orthogonal to HG)
             %
             % Example:
             %   [HG, NHG] = HermiteComputation.hermiteSolutions(2, linspace(-1,1,11))
@@ -59,6 +62,25 @@ classdef HermiteComputation
                 NHG = fimpar;
                 HG = fpar;
             end
+        end
+
+        function NHG = hermiteSecondSolution(n, x)
+            % hermiteSecondSolution - Second independent Hermite solution (NHG).
+            %
+            % Returns only the second independent solution (NHG) of the Hermite
+            % differential equation, without computing HG.
+            %
+            % Input:
+            %   n  - Hermite order
+            %   x  - evaluation point(s), scalar or vector
+            %
+            % Output:
+            %   NHG - second independent Hermite solution (normalized partner)
+            %
+            % Example:
+            %   NHG = HermiteComputation.hermiteSecondSolution(2, linspace(-2,2,11))
+
+            [~, NHG] = HermiteComputation.hermiteSolutions(n, x);
         end
 
     end

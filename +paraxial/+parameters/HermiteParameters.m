@@ -117,18 +117,28 @@ classdef HermiteParameters < GaussianParameters
             wH = w * sqrt(n + m + 1);
         end
 
-        function [HG, NHG] = getHermiteSolutions(nu, x)
+        function [HG, NHG] = getHermiteSolutions(n, x)
             % getHermiteSolutions - Legacy-compatible Hermite pair (HG, NHG).
             %
-            % DEPRECATED: Use HermiteComputation.hermiteSolutions(nu, x) instead.
+            % DEPRECATED (since Phase 3):
+            %   Use HermiteComputation.hermiteSolutions(n, x) directly.
             %
             % This entrypoint is preserved for backward compatibility with
             % research scripts that build Hankel-Hermite combinations from
             % the two independent series solutions of the Hermite differential
-            % equation.
+            % equation. Prefer using HermiteBeam + NHermiteBeam composition.
             %
-            % Calls: HermiteComputation.hermiteSolutions(nu, x)
-            [HG, NHG] = HermiteComputation.hermiteSolutions(nu, x);
+            % Parameters:
+            %   n  - Hermite order
+            %   x  - scaled coordinate: sqrt(2)*coord/w
+            %
+            % Returns:
+            %   HG  - standard Hermite polynomial H_n(x)
+            %   NHG - second independent solution (normalized partner)
+            %
+            % See also: HermiteComputation.hermiteSolutions,
+            %           HermiteComputation.hermiteSecondSolution
+            [HG, NHG] = HermiteComputation.hermiteSolutions(n, x);
         end
     end
 end

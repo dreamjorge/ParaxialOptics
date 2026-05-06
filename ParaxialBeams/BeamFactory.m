@@ -68,7 +68,7 @@ classdef BeamFactory
 
             % Try +paraxial/ first (canonical)
             if BeamFactory.classExists(canonical)
-                beam = feval(className, constructorArgs{:});
+                beam = feval(canonical, constructorArgs{:});
 
             % Fallback to src/ with deprecation warning
             elseif exist(legacy, 'file')
@@ -88,7 +88,9 @@ classdef BeamFactory
             % supportedTypes - Return cell array of all supported type names.
             types = {'gaussian', 'hermite', 'laguerre', ...
                      'elegant_hermite', 'elegant_laguerre', ...
-                     'hankel', 'hankel_hermite'};
+                     'hankel', 'hankel_hermite', ...
+                     'nhermite', 'xlaguerre', ...
+                     'elegant_nhermite', 'elegant_xlaguerre'};
         end
     end
 
@@ -150,9 +152,29 @@ classdef BeamFactory
                     canonical = 'paraxial.beams.HankelHermite';
                     legacy = 'src/beams/HankelHermite.m';
 
+                case {'nhermite', 'nherm'}
+                    className = 'NHermiteBeam';
+                    canonical = 'paraxial.beams.NHermiteBeam';
+                    legacy = 'src/beams/NHermiteBeam.m';
+
+                case {'xlaguerre', 'xlg'}
+                    className = 'XLaguerreBeam';
+                    canonical = 'paraxial.beams.XLaguerreBeam';
+                    legacy = 'src/beams/XLaguerreBeam.m';
+
+                case {'elegant_nhermite', 'elegant_nherm'}
+                    className = 'ElegantNHermiteBeam';
+                    canonical = 'paraxial.beams.ElegantNHermiteBeam';
+                    legacy = 'src/beams/ElegantNHermiteBeam.m';
+
+                case {'elegant_xlaguerre', 'elegant_xlg'}
+                    className = 'ElegantXLaguerreBeam';
+                    canonical = 'paraxial.beams.ElegantXLaguerreBeam';
+                    legacy = 'src/beams/ElegantXLaguerreBeam.m';
+
                 otherwise
                     error('BeamFactory:unknownType', ...
-                        'Unknown beam type "%s". Supported: gaussian, hermite, laguerre, elegant_hermite, elegant_laguerre, hankel, hankel_hermite.', ...
+                        'Unknown beam type "%s". Supported: gaussian, hermite, laguerre, elegant_hermite, elegant_laguerre, hankel, hankel_hermite, nhermite, xlaguerre, elegant_nhermite, elegant_xlaguerre.', ...
                         type);
             end
         end
@@ -209,10 +231,10 @@ classdef BeamFactory
                 case 'gaussian'
                     args = {w0, lambda};
 
-                case {'hermite', 'elegant_hermite'}
+                case {'hermite', 'elegant_hermite', 'nhermite', 'elegant_nhermite'}
                     args = {w0, lambda, n, m};
 
-                case {'laguerre', 'elegant_laguerre'}
+                case {'laguerre', 'elegant_laguerre', 'xlaguerre', 'elegant_xlaguerre'}
                     args = {w0, lambda, l, p};
 
                 case {'hankel', 'hankel_laguerre'}

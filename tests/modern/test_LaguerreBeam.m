@@ -283,6 +283,129 @@ else
     failed = failed + 1;
 end
 
+%% ===== XLaguerreBeam Tests =====
+
+fprintf('\n--- XLaguerreBeam Tests ---\n');
+
+% XLaguerreBeam modern constructor
+xlb = XLaguerreBeam(w0, lambda, 1, 0);
+if (xlb.InitialWaist == w0 && xlb.l == 1 && xlb.p == 0 && xlb.Lambda == lambda)
+    fprintf('  PASS: XLaguerreBeam modern constructor\n');
+    passed = passed + 1;
+else
+    fprintf('  FAIL: XLaguerreBeam modern constructor\n');
+    failed = failed + 1;
+end
+
+% XLaguerreBeam field finite at waist
+xlb_field = xlb.opticalField(X, Y, 0);
+if (all(all(isfinite(xlb_field))) && isequal(size(xlb_field), [64, 64]))
+    fprintf('  PASS: XLaguerreBeam field finite at waist\n');
+    passed = passed + 1;
+else
+    fprintf('  FAIL: XLaguerreBeam field finite at waist\n');
+    failed = failed + 1;
+end
+
+% XLaguerreBeam field finite at propagation
+xlb_zr = xlb.opticalField(X, Y, pi * w0^2 / lambda);
+if (all(all(isfinite(xlb_zr))))
+    fprintf('  PASS: XLaguerreBeam field finite at zr\n');
+    passed = passed + 1;
+else
+    fprintf('  FAIL: XLaguerreBeam field at zr\n');
+    failed = failed + 1;
+end
+
+% XLaguerreBeam beamName format
+if (strcmp(xlb.beamName(), 'xlaguerre_1_0'))
+    fprintf('  PASS: XLaguerreBeam beamName\n');
+    passed = passed + 1;
+else
+    fprintf('  FAIL: XLaguerreBeam beamName (got %s)\n', xlb.beamName());
+    failed = failed + 1;
+end
+
+% XLaguerreBeam getParameters
+xlb_params = xlb.getParameters(0.05);
+if (isa(xlb_params, 'GaussianParameters') && abs(xlb_params.zCoordinate - 0.05) < 1e-15)
+    fprintf('  PASS: XLaguerreBeam getParameters\n');
+    passed = passed + 1;
+else
+    fprintf('  FAIL: XLaguerreBeam getParameters\n');
+    failed = failed + 1;
+end
+
+% XLaguerreBeam isa ParaxialBeam
+if (isa(xlb, 'ParaxialBeam'))
+    fprintf('  PASS: XLaguerreBeam isa ParaxialBeam\n');
+    passed = passed + 1;
+else
+    fprintf('  FAIL: XLaguerreBeam isa ParaxialBeam\n');
+    failed = failed + 1;
+end
+
+% XLaguerreBeam legacy constructor
+lp_test = LaguerreParameters(0.01, w0, lambda, 2, 1);
+r_leg = linspace(0, 5e-3, 21)';
+theta_leg = zeros(21, 1);
+xlb_leg = XLaguerreBeam(r_leg, theta_leg, lp_test);
+if (~isempty(xlb_leg.OpticalField) && numel(xlb_leg.OpticalField) == numel(r_leg))
+    fprintf('  PASS: XLaguerreBeam legacy constructor\n');
+    passed = passed + 1;
+else
+    fprintf('  FAIL: XLaguerreBeam legacy constructor\n');
+    failed = failed + 1;
+end
+
+% XLaguerreBeam higher orders
+xlb_high = XLaguerreBeam(w0, lambda, 2, 1);
+xlb_high_field = xlb_high.opticalField(X, Y, 0);
+if (all(all(isfinite(xlb_high_field))))
+    fprintf('  PASS: XLaguerreBeam higher order modes\n');
+    passed = passed + 1;
+else
+    fprintf('  FAIL: XLaguerreBeam higher order modes\n');
+    failed = failed + 1;
+end
+
+% XLaguerreBeam l=0 p=0 at axis (no inner regularization for l=0)
+xlb_l0 = XLaguerreBeam(w0, lambda, 0, 0);
+[TH_ax, R_ax] = cart2pol(X, Y);
+R_center = R_ax(32, 32);  % r near 0
+field_axis = xlb_l0.opticalField(X, Y, 0);
+if (all(all(isfinite(field_axis))) && abs(field_axis(32,32)) > 0)
+    fprintf('  PASS: XLaguerreBeam l=0 at axis finite and non-zero\n');
+    passed = passed + 1;
+else
+    fprintf('  FAIL: XLaguerreBeam l=0 at axis\n');
+    failed = failed + 1;
+end
+
+% XLaguerreBeam l>0 inner regularization
+xlb_vortex = XLaguerreBeam(w0, lambda, 2, 0);
+field_vortex = xlb_vortex.opticalField(X, Y, 0);
+if (all(all(isfinite(field_vortex))))
+    fprintf('  PASS: XLaguerreBeam l>0 finite with inner regularization\n');
+    passed = passed + 1;
+else
+    fprintf('  FAIL: XLaguerreBeam l>0 regularization\n');
+    failed = failed + 1;
+end
+
+% XLaguerreBeam different l and p combinations
+xlb_10 = XLaguerreBeam(w0, lambda, 1, 0);
+xlb_01 = XLaguerreBeam(w0, lambda, 0, 1);
+field_10 = xlb_10.opticalField(X, Y, 0);
+field_01 = xlb_01.opticalField(X, Y, 0);
+if (isequal(size(field_10), size(field_01)) && ~isequaln(field_10, field_01))
+    fprintf('  PASS: XLaguerreBeam different l p combinations distinct\n');
+    passed = passed + 1;
+else
+    fprintf('  FAIL: XLaguerreBeam different l p\n');
+    failed = failed + 1;
+end
+
 fprintf('\n=== LaguerreBeam: %d/%d passed ===\n', passed, passed + failed);
 
 if failed ~= 0

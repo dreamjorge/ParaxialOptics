@@ -130,15 +130,87 @@ classdef HankelHermite < ParaxialBeam
             else
                 obj.OpticalField = [];
             end
-        end
+        end  % constructor HankelHermite
+    end  % methods (constructor block)
 
-        % -----------------------------------------------------------------
-        % ParaxialBeam interface
-        % -----------------------------------------------------------------
+    % -----------------------------------------------------------------
+    % Private helpers
+    % -----------------------------------------------------------------
+    methods (Access = private)
+        function field = hankelHermiteField_composed(obj, X, Y, z)
+            % hankelHermiteField_composed - Compute Hankel-Hermite via beam composition.
+            %
+            % Uses HermiteBeam + NHermiteBeam as composition components.
+            % This is the primary implementation; hankelHermiteField (module-private)
+            % is retained only for legacy OpticalField snapshots.
+            %
+            % Hankel types:
+            %   H^(11) = (HG_x + i*NHG_x) * (HG_y + i*NHG_y) * carrier
+            %   H^(12) = (HG_x + i*NHG_x) * (HG_y - i*NHG_y) * carrier
+            %   H^(21) = (HG_x - i*NHG_x) * (HG_y + i*NHG_y) * carrier
+            %   H^(22) = (HG_x - i*NHG_x) * (HG_y - i*NHG_y) * carrier
 
+            w0     = obj.InitialWaist;
+            lambda = obj.Lambda;
+            k      = obj.k;
+            zr     = pi * w0^2 / lambda;
+            n      = obj.n;
+            m      = obj.m;
+            ht     = obj.HankelType;
+
+            w   = w0 * sqrt(1 + (z/zr)^2);
+            Rc  = z  * (1 + (zr/z)^2);
+            if z == 0, Rc = Inf; end
+            psi = atan2(z, zr);
+
+            % Gaussian carrier field u_0(r,z)
+            r          = sqrt(X.^2 + Y.^2);
+            amplitude  = (w0 ./ w) .* exp(-r.^2 ./ w.^2);
+            phase_z    = -1i * k * z;
+            phase_curv = 1i * k * r.^2 ./ (2 * Rc);
+            phase_curv(isinf(Rc)) = 0;
+            phase_gouy = -1i * psi;
+            carrier    = amplitude .* exp(phase_z + phase_curv + phase_gouy);
+
+            % Modal Gouy phase shift: (n+m)*psi
+            phi_mode = (n + m) * psi;
+
+            % Compose HG and NHG via beam instances
+            hgBeam = HermiteBeam(w0, lambda, n, m);
+            nhgBeam = NHermiteBeam(w0, lambda, n, m);
+
+            HGx = hgBeam.opticalField(X, Y, z);
+            NHx = nhgBeam.opticalField(X, Y, z);
+
+            % For y, reuse same beams with swapped orders
+            hgBeam_y = HermiteBeam(w0, lambda, m, n);
+            nhgBeam_y = NHermiteBeam(w0, lambda, m, n);
+
+            HGy = hgBeam_y.opticalField(X, Y, z);
+            NHy = nhgBeam_y.opticalField(X, Y, z);
+
+            % Hankel combination per type
+            switch ht
+                case 11
+                    field = (HGx + 1i * NHx) .* (HGy + 1i * NHy) .* exp(-1i * phi_mode) .* carrier;
+                case 12
+                    field = (HGx + 1i * NHx) .* (HGy - 1i * NHy) .* exp(-1i * phi_mode) .* carrier;
+                case 21
+                    field = (HGx - 1i * NHx) .* (HGy + 1i * NHy) .* exp(-1i * phi_mode) .* carrier;
+                case 22
+                    field = (HGx - 1i * NHx) .* (HGy - 1i * NHy) .* exp(-1i * phi_mode) .* carrier;
+                otherwise
+                    error('HankelHermite:invalidType', 'Unsupported Hankel type: %d. Use 11, 12, 21, or 22.', ht);
+            end
+        end  % hankelHermiteField_composed
+    end  % private methods
+
+    % -----------------------------------------------------------------
+    % ParaxialBeam interface
+    % -----------------------------------------------------------------
+    methods
         function field = opticalField(obj, X, Y, z)
-            field = hankelHermiteField(X, Y, obj.InitialWaist, obj.Lambda, ...
-                obj.n, obj.m, z, obj.HankelType);
+            field = hankelHermiteField_composed(obj, X, Y, z);
         end
 
         function params = getParameters(obj, z)

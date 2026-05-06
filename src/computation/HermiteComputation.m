@@ -61,5 +61,26 @@ classdef HermiteComputation
             end
         end
 
+        function NHG = hermiteSecondSolution(n, x)
+            % hermiteSecondSolution - Second independent Hermite solution (NHG).
+            %
+            % Returns the normalized partner of the standard Hermite polynomial H_n.
+            % NHG is orthogonal to H_n and is given by the companion solution of
+            % the Hermite differential equation.
+            %
+            % Input:
+            %   n  - Hermite order (integer)
+            %   x  - evaluation point(s), scalar or vector
+            %
+            % Output:
+            %   NHG - second independent Hermite solution (normalized partner)
+            %
+            % Example:
+            %   NHG = HermiteComputation.hermiteSecondSolution(2, linspace(-2,2,11))
+
+            % Delegate to hermiteSolutions and return only NHG
+            [~, NHG] = HermiteComputation.hermiteSolutions(n, x);
+        end
+
     end
 end

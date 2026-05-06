@@ -308,6 +308,104 @@ else
     failed = failed + 1;
 end
 
+%% ===== NHermiteBeam Tests =====
+
+fprintf('\n--- NHermiteBeam Tests ---\n');
+
+% NHermiteBeam modern constructor
+nhb = NHermiteBeam(w0, lambda, 1, 1);
+if (nhb.InitialWaist == w0 && nhb.n == 1 && nhb.m == 1 && nhb.Lambda == lambda)
+    fprintf('  PASS: NHermiteBeam modern constructor\n');
+    passed = passed + 1;
+else
+    fprintf('  FAIL: NHermiteBeam modern constructor\n');
+    failed = failed + 1;
+end
+
+% NHermiteBeam field finite at waist
+nhb_field = nhb.opticalField(X, Y, 0);
+if (all(all(isfinite(nhb_field))) && isequal(size(nhb_field), [64, 64]))
+    fprintf('  PASS: NHermiteBeam field finite at waist\n');
+    passed = passed + 1;
+else
+    fprintf('  FAIL: NHermiteBeam field finite at waist\n');
+    failed = failed + 1;
+end
+
+% NHermiteBeam field finite at propagation
+nhb_zr = nhb.opticalField(X, Y, pi * w0^2 / lambda);
+if (all(all(isfinite(nhb_zr))))
+    fprintf('  PASS: NHermiteBeam field finite at zr\n');
+    passed = passed + 1;
+else
+    fprintf('  FAIL: NHermiteBeam field at zr\n');
+    failed = failed + 1;
+end
+
+% NHermiteBeam beamName format
+if (strcmp(nhb.beamName(), 'nhermite_1_1'))
+    fprintf('  PASS: NHermiteBeam beamName\n');
+    passed = passed + 1;
+else
+    fprintf('  FAIL: NHermiteBeam beamName (got %s)\n', nhb.beamName());
+    failed = failed + 1;
+end
+
+% NHermiteBeam getParameters
+nhb_params = nhb.getParameters(0.05);
+if (isa(nhb_params, 'GaussianParameters') && abs(nhb_params.zCoordinate - 0.05) < 1e-15)
+    fprintf('  PASS: NHermiteBeam getParameters\n');
+    passed = passed + 1;
+else
+    fprintf('  FAIL: NHermiteBeam getParameters\n');
+    failed = failed + 1;
+end
+
+% NHermiteBeam isa ParaxialBeam
+if (isa(nhb, 'ParaxialBeam'))
+    fprintf('  PASS: NHermiteBeam isa ParaxialBeam\n');
+    passed = passed + 1;
+else
+    fprintf('  FAIL: NHermiteBeam isa ParaxialBeam\n');
+    failed = failed + 1;
+end
+
+% NHermiteBeam legacy constructor
+hp_test = HermiteParameters(0.01, w0, lambda, 2, 1);
+x_leg = linspace(-1e-3, 1e-3, 21);
+y_leg = 1e-4;
+nhb_leg = NHermiteBeam(x_leg, y_leg, hp_test);
+if (~isempty(nhb_leg.OpticalField) && numel(nhb_leg.OpticalField) == numel(x_leg))
+    fprintf('  PASS: NHermiteBeam legacy constructor\n');
+    passed = passed + 1;
+else
+    fprintf('  FAIL: NHermiteBeam legacy constructor\n');
+    failed = failed + 1;
+end
+
+% hermiteSecondSolution returns NHG different from HG
+x_test = linspace(-2, 2, 11);
+[HG, NHG] = HermiteComputation.hermiteSolutions(2, x_test);
+NHG_direct = HermiteComputation.hermiteSecondSolution(2, x_test);
+if (max(abs(NHG - NHG_direct)) < 1e-14 && max(abs(HG - NHG_direct)) > 1e-6)
+    fprintf('  PASS: hermiteSecondSolution returns NHG distinct from HG\n');
+    passed = passed + 1;
+else
+    fprintf('  FAIL: hermiteSecondSolution NHG vs HG distinction\n');
+    failed = failed + 1;
+end
+
+% NHermiteBeam higher orders
+nhb_high = NHermiteBeam(w0, lambda, 2, 3);
+nhb_high_field = nhb_high.opticalField(X, Y, 0);
+if (all(all(isfinite(nhb_high_field))))
+    fprintf('  PASS: NHermiteBeam higher order modes\n');
+    passed = passed + 1;
+else
+    fprintf('  FAIL: NHermiteBeam higher order modes\n');
+    failed = failed + 1;
+end
+
 fprintf('\n=== HermiteBeam: %d/%d passed ===\n', passed, passed + failed);
 
 if failed ~= 0

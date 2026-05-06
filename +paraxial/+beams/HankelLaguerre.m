@@ -123,9 +123,11 @@ classdef HankelLaguerre < ParaxialBeam
         function field = opticalField(obj, X, Y, z)
             % opticalField - Complex optical field on Cartesian grid (X,Y) at depth z.
             %
-            % Converts Cartesian to polar, then computes the Hankel superposition.
-            [TH, R] = cart2pol(X, Y);
-            field   = hankelField(R, TH, obj.InitialWaist, obj.Lambda, obj.l, obj.p, z, obj.HankelType);
+            % Composed from LaguerreBeam + XLaguerreBeam as independent solutions.
+            % LB and XLG are computed independently then superposed:
+            %   H^(1) = LB + i*XLG   (outward propagating)
+            %   H^(2) = LB - i*XLG   (inward propagating)
+            field = obj.hankelField_composed(X, Y, z);
         end
 
         function params = getParameters(obj, z)
@@ -243,6 +245,65 @@ classdef HankelLaguerre < ParaxialBeam
             elseif idx > maxSize
                 idx = maxSize;
             end
+        end
+    end
+
+    % -----------------------------------------------------------------
+    % Private helpers (beam composition)
+    % -----------------------------------------------------------------
+    methods (Access = private)
+        function field = hankelField_composed(obj, X, Y, z)
+            % hankelField_composed - Compute Hankel-Laguerre via beam composition.
+            %
+            % Uses LaguerreBeam + XLaguerreBeam as independent solutions.
+            % LB = first solution (standard associated Laguerre polynomial)
+            % XLG = second solution (xAssociatedLaguerre, same truncation
+            % regularization as HankelLaguerre.hankelField)
+            %
+            % Hankel superposition:
+            %   H^(1) = LB + i*XLG   (outward propagating)
+            %   H^(2) = LB - i*XLG   (inward propagating)
+
+            w0     = obj.InitialWaist;
+            lambda = obj.Lambda;
+            k      = obj.k;
+            l      = obj.l;
+            p      = obj.p;
+            ht     = obj.HankelType;
+            zr     = pi * w0^2 / lambda;
+
+            w   = w0 * sqrt(1 + (z/zr)^2);
+            Rc  = z  * (1 + (zr/z)^2);
+            if z == 0, Rc = Inf; end
+            psi = atan2(z, zr);
+
+            % Gaussian carrier field u_0(r,z)
+            [TH, R] = cart2pol(X, Y);
+            r          = R;
+            amplitude  = (w0 ./ w) .* exp(-r.^2 ./ w.^2);
+            phase_z    = -1i * k * z;
+            phase_curv = 1i * k * r.^2 ./ (2 * Rc);
+            phase_curv(isinf(Rc)) = 0;
+            phase_gouy = -1i * psi;
+            carrier    = amplitude .* exp(phase_z + phase_curv + phase_gouy);
+
+            % Modal Gouy phase shift: (|l|+2p)*psi
+            phi_mode = (abs(l) + 2*p) * psi;
+
+            % Compose LB and XLG via beam instances
+            lbBeam  = LaguerreBeam(w0, lambda, l, p);
+            xlgBeam = XLaguerreBeam(w0, lambda, l, p);
+
+            LB  = lbBeam.opticalField(X, Y, z);
+            XLG = xlgBeam.opticalField(X, Y, z);
+
+            % Hankel superposition
+            if ht == 1
+                field = (LB + 1i * XLG) .* exp(-1i * phi_mode) .* carrier;
+            else
+                field = (LB - 1i * XLG) .* exp(-1i * phi_mode) .* carrier;
+            end
+            field(~isfinite(field)) = 0;
         end
     end
 end
