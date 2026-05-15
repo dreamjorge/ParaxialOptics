@@ -178,7 +178,7 @@ end
 
 % testBeamFactory
 beam_f = BeamFactory.create('hankel_hermite', w0, lambda, 'n', 2, 'm', 1, 'type', 12);
-if isa(beam_f, 'HankelHermite') && beam_f.HankelType == 12 && beam_f.n == 2 && beam_f.m == 1
+if (isa(beam_f, 'HankelHermite') || isa(beam_f, 'paraxial.beams.HankelHermite')) && beam_f.HankelType == 12 && beam_f.n == 2 && beam_f.m == 1
     fprintf('  PASS: BeamFactory create\n');
     passed = passed + 1;
 else

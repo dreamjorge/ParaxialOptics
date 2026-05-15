@@ -1,7 +1,9 @@
 % Compatible with GNU Octave and MATLAB
 % Tests for BeamFactory
 
-addpath(fullfile(fileparts(fileparts(fileparts(mfilename('fullpath')))), 'ParaxialBeams'));
+repoRoot = fileparts(fileparts(fileparts(mfilename('fullpath'))));
+addpath(repoRoot);
+setpaths();
 
 fprintf('=== BeamFactory Tests ===\n\n');
 passed = 0;
@@ -14,7 +16,7 @@ grid = GridUtils(64, 64, 1e-3, 1e-3);
 
 % testCreateGaussian
 beam = BeamFactory.create('gaussian', w0, lambda);
-if (isa(beam, 'GaussianBeam'))
+if (isa(beam, 'GaussianBeam') || isa(beam, 'paraxial.beams.GaussianBeam'))
     fprintf('  PASS: create gaussian\n');
     passed = passed + 1;
 else
@@ -24,7 +26,7 @@ end
 
 % testCreateHermite
 beam = BeamFactory.create('hermite', w0, lambda, 'n', 1, 'm', 2);
-if (isa(beam, 'HermiteBeam') && beam.n == 1 && beam.m == 2)
+if ((isa(beam, 'HermiteBeam') || isa(beam, 'paraxial.beams.HermiteBeam')) && beam.n == 1 && beam.m == 2)
     fprintf('  PASS: create hermite\n');
     passed = passed + 1;
 else
@@ -34,7 +36,7 @@ end
 
 % testCreateLaguerre
 beam = BeamFactory.create('laguerre', w0, lambda, 'l', 2, 'p', 1);
-if (isa(beam, 'LaguerreBeam') && beam.l == 2 && beam.p == 1)
+if ((isa(beam, 'LaguerreBeam') || isa(beam, 'paraxial.beams.LaguerreBeam')) && beam.l == 2 && beam.p == 1)
     fprintf('  PASS: create laguerre\n');
     passed = passed + 1;
 else
@@ -44,7 +46,7 @@ end
 
 % testCreateElegantHermite
 beam = BeamFactory.create('elegant_hermite', w0, lambda, 'n', 2, 'm', 0);
-if (isa(beam, 'ElegantHermiteBeam') && beam.n == 2 && beam.m == 0)
+if ((isa(beam, 'ElegantHermiteBeam') || isa(beam, 'paraxial.beams.ElegantHermiteBeam')) && beam.n == 2 && beam.m == 0)
     fprintf('  PASS: create elegant_hermite\n');
     passed = passed + 1;
 else
@@ -54,7 +56,7 @@ end
 
 % testCreateElegantLaguerre
 beam = BeamFactory.create('elegant_laguerre', w0, lambda, 'l', 1, 'p', 0);
-if (isa(beam, 'ElegantLaguerreBeam') && beam.l == 1 && beam.p == 0)
+if ((isa(beam, 'ElegantLaguerreBeam') || isa(beam, 'paraxial.beams.ElegantLaguerreBeam')) && beam.l == 1 && beam.p == 0)
     fprintf('  PASS: create elegant_laguerre\n');
     passed = passed + 1;
 else
@@ -64,7 +66,7 @@ end
 
 % testCreateHankel
 beam = BeamFactory.create('hankel', w0, lambda, 'l', 1, 'p', 0, 'type', 2);
-if (isa(beam, 'HankelLaguerre') && beam.HankelType == 2)
+if ((isa(beam, 'HankelLaguerre') || isa(beam, 'paraxial.beams.HankelLaguerre')) && beam.HankelType == 2)
     fprintf('  PASS: create hankel\n');
     passed = passed + 1;
 else
@@ -178,7 +180,7 @@ end
 
 % testCaseInsensitive
 beam = BeamFactory.create('GAUSSIAN', w0, lambda);
-if isa(beam, 'GaussianBeam')
+if isa(beam, 'GaussianBeam') || isa(beam, 'paraxial.beams.GaussianBeam')
     fprintf('  PASS: case insensitive\n');
     passed = passed + 1;
 else
@@ -188,7 +190,7 @@ end
 
 % testSupportedTypes
 types = BeamFactory.supportedTypes();
-if (numel(types) == 7)
+if (numel(types) == 11)
     fprintf('  PASS: supportedTypes count\n');
     passed = passed + 1;
 else
@@ -198,7 +200,7 @@ end
 
 % testHermiteIsParaxialBeam
 beam = BeamFactory.create('hermite', w0, lambda, 'n', 1, 'm', 1);
-if isa(beam, 'ParaxialBeam')
+if isa(beam, 'ParaxialBeam') || isa(beam, 'paraxial.beams.ParaxialBeam')
     fprintf('  PASS: all beams are ParaxialBeam\n');
     passed = passed + 1;
 else
