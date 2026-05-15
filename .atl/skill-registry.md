@@ -4,6 +4,11 @@
 
 Last updated: 2026-05-15
 
+## Runtime Baseline
+
+- GNU Octave 11.1.0+
+- MATLAB R2020b+
+
 ## Sources scanned
 
 - C:\Users\uidn7961\.agents\skills

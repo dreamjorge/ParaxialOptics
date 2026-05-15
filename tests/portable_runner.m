@@ -76,9 +76,9 @@ function totalFailed = portable_runner()
         'test_Wavefront.m'
     };
 
-    % --- LEGACY src/ PATHS: SOLO para edge cases ---
-    % Los paths legacy_compat fueron archivados (2026-05-15).
-    % Los tests en tests/edge_cases/ que dependen de src/ están listados abajo.
+    % --- DEPRECATED COMPATIBILITY PATHS (src/) ---
+    % Legacy library structure — kept only for edge cases and transition period.
+    % Do not add for new development or onboarding.
     % Port compatible: use strfind instead of contains for Octave/MATLAB
     legacySrcNeeded = false;
     for i = 1:numel(testFiles)
