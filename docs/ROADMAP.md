@@ -46,11 +46,7 @@ Before tagging a release:
 
 ## Phase 5: Legacy and Addons Cleanup
 
-- [x] Classify `ParaxialBeams/Addons/` as runtime-required, plotting-only, vendored third-party, or removable. Completed 2026-05-15 via SDD `addons-cleanup`.
-  - **Runtime-required**: 0 files (none called from `+paraxial/` or `tests/`)
-  - **Plotting-only** (~23 files, retained): `AdvancedColormap.m`, `tight_subplot.m`, `vline.m`, `unwrap_phase.m`, `Plots_Functions/`
-  - **Vendored third-party** (~29 files, retained): `export_fig-master/` (BSD), `panel-2.14/` (BSD)
-  - **Removable** (13 files, removed): all ray utilities, legacy stubs, unused propagators
+- Classify `ParaxialBeams/Addons/` as runtime-required, plotting-only, vendored third-party, or removable.
 - Keep legacy examples documented as archive/generator/research material.
 - Avoid presenting legacy examples as the default user path.
 
