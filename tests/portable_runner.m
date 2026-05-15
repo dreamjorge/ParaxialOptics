@@ -23,7 +23,6 @@ function totalFailed = portable_runner()
     
     % Add test subdirectories
     addpath(fullfile(testDir, 'modern'));
-    addpath(fullfile(testDir, 'legacy_compat'));
     addpath(fullfile(testDir, 'edge_cases'));
 
     % Legacy alias removal mode:
@@ -68,10 +67,7 @@ function totalFailed = portable_runner()
         'test_RepositoryGuardrails.m',
         'test_Propagators.m',
         'test_RayTracing.m',
-        fullfile(testDir, 'legacy_compat', 'test_HankelCompatibility.m'),
-        fullfile(testDir, 'legacy_compat', 'test_LegacyBeamConstructors.m'),
-        fullfile(testDir, 'legacy_compat', 'test_HankelAliasStaticDelegation.m'),
-        fullfile(testDir, 'legacy_compat', 'test_HankelAliasEdgeCases.m'),
+
         % Edge case tests (z=0, r=0, extreme parameters)
         'test_GaussianBeam_edge.m',
         'test_HankelHermite_edge.m',
@@ -80,22 +76,19 @@ function totalFailed = portable_runner()
         'test_Wavefront.m'
     };
 
-    % --- LEGACY src/ PATHS: SOLO para tests de compatibilidad / edge cases ---
-    % Estos paths no son necesarios para el onboarding moderno ni para la mayoría
-    % de los tests en +paraxial/. Se mantienen activos UNICAMENTE para que
-    % los tests en tests/legacy_compat/ y algunos edge cases funcionen durante
-    % la transición. 
-    % Si tu sesión no depende realmente de legacy/compatibilidad, eliminá estos paths.
+    % --- LEGACY src/ PATHS: SOLO para edge cases ---
+    % Los paths legacy_compat fueron archivados (2026-05-15).
+    % Los tests en tests/edge_cases/ que dependen de src/ están listados abajo.
     % Port compatible: use strfind instead of contains for Octave/MATLAB
-    legacyCompatNeeded = false;
+    legacySrcNeeded = false;
     for i = 1:numel(testFiles)
         tf = testFiles{i};
-        if ~isempty(strfind(tf, 'legacy_compat')) || ~isempty(strfind(tf, '_edge'))
-            legacyCompatNeeded = true;
+        if ~isempty(strfind(tf, '_edge')) || ~isempty(strfind(tf, 'HankelRayTracing'))
+            legacySrcNeeded = true;
             break;
         end
     end
-    if legacyCompatNeeded
+    if legacySrcNeeded
         addpath(fullfile(repoRoot, 'src', 'beams'));
         addpath(fullfile(repoRoot, 'src', 'parameters'));
         addpath(fullfile(repoRoot, 'src', 'computation'));
