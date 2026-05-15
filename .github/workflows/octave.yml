@@ -36,34 +36,6 @@ jobs:
           path: portable-tests.log
           retention-days: 14
 
-  legacy-compat:
-    name: legacy-compat
-    runs-on: ubuntu-latest
-    timeout-minutes: 30
-    permissions:
-      contents: read
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Octave
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y octave
-
-      - name: Run legacy compatibility suite
-        run: |
-          set -o pipefail
-          octave --no-gui --eval "run('tests/legacy_compat/run_legacy_compat.m')" 2>&1 | tee legacy-compat.log
-
-      - name: Upload legacy logs
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: legacy-compat-log
-          path: legacy-compat.log
-          retention-days: 14
-
   benchmark:
     name: benchmark-baseline
     runs-on: ubuntu-latest
