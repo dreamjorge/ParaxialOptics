@@ -13,16 +13,6 @@ function totalFailed = portable_runner()
     % Do not add internal +package folders directly.
     addpath(repoRoot);
 
-    % Deprecated compatibility paths (src/)
-    % Keep these during the Strangler Fig migration so legacy adapters and
-    % compatibility tests remain executable. New code should prefer +paraxial/
-    % or BeamFactory.create().
-    addpath(fullfile(repoRoot, 'src', 'beams'));
-    addpath(fullfile(repoRoot, 'src', 'parameters'));
-    addpath(fullfile(repoRoot, 'src', 'computation'));
-    addpath(fullfile(repoRoot, 'src', 'propagation', 'field'));
-    addpath(fullfile(repoRoot, 'src', 'propagation', 'rays'));
-    addpath(fullfile(repoRoot, 'src', 'visualization'));
     
     % Add utilities and legacy addons (ParaxialBeams/)
     addpath(fullfile(repoRoot, 'ParaxialBeams'));
@@ -89,6 +79,31 @@ function totalFailed = portable_runner()
         'test_RayTracing_extreme.m',
         'test_Wavefront.m'
     };
+
+    % --- LEGACY src/ PATHS: SOLO para tests de compatibilidad / edge cases ---
+    % Estos paths no son necesarios para el onboarding moderno ni para la mayoría
+    % de los tests en +paraxial/. Se mantienen activos UNICAMENTE para que
+    % los tests en tests/legacy_compat/ y algunos edge cases funcionen durante
+    % la transición. 
+    % Si tu sesión no depende realmente de legacy/compatibilidad, eliminá estos paths.
+    % Port compatible: use strfind instead of contains for Octave/MATLAB
+    legacyCompatNeeded = false;
+    for i = 1:numel(testFiles)
+        tf = testFiles{i};
+        if ~isempty(strfind(tf, 'legacy_compat')) || ~isempty(strfind(tf, '_edge'))
+            legacyCompatNeeded = true;
+            break;
+        end
+    end
+    if legacyCompatNeeded
+        addpath(fullfile(repoRoot, 'src', 'beams'));
+        addpath(fullfile(repoRoot, 'src', 'parameters'));
+        addpath(fullfile(repoRoot, 'src', 'computation'));
+        addpath(fullfile(repoRoot, 'src', 'propagation', 'field'));
+        addpath(fullfile(repoRoot, 'src', 'propagation', 'rays'));
+        addpath(fullfile(repoRoot, 'src', 'visualization'));
+        fprintf('  [WARN] Paths legacy src/ activos SOLO para compatibilidad/transición.\n');
+    end
     
     totalPassed = 0;
     totalFailed = 0;

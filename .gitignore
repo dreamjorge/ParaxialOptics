@@ -5,3 +5,5 @@
 .worktrees/
 .opencode/
 .atl/.skill-registry.cache.json
+# Local Pi runtime state
+.atl/

@@ -4,7 +4,6 @@
 % These tests verify that the computation layer produces numerically
 % correct results matching the physical formulas for Gaussian beams.
 
-addpath(fullfile(fileparts(fileparts(fileparts(mfilename('fullpath')))), 'src', 'computation'));
 
 fprintf('=== BeamComputation Tests ===\n\n');
 passed = 0;
