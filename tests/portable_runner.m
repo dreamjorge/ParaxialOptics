@@ -76,7 +76,7 @@ function totalFailed = portable_runner()
         'test_Wavefront.m'
     };
 
-    % --- DEPRECATED COMPATIBILITY PATHS (src/) ---
+    % --- Deprecated compatibility paths (src/) ---
     % Legacy library structure — kept only for edge cases and transition period.
     % Do not add for new development or onboarding.
     % Port compatible: use strfind instead of contains for Octave/MATLAB
