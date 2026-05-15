@@ -16,6 +16,12 @@ All notable changes to this project are documented in this file.
 ### Removed
 - Stale CircleCI welcome-only configuration.
 
+## [Unreleased] - Addons Cleanup
+
+### Removed
+- Removed 13 dead-code files from `ParaxialBeams/Addons/`: `copyRay.m`, `copy2Ray.m`, `copyArrayRay2Ray.m`, `copyElementRay.m`, `copyElementsOnRay.m`, `copyRay2ArrayRay.m`, `getCylindricalGradient.m`, `getPropagateCylindricalRays.m`, `paraxialPropagator.m`, `propagateOpticalField.m`, `assignCoordinates2CartesianRay.m`, `assignCoordinates2CylindricalRay.m`, `license.txt`.
+- Classification: zero runtime-required, ~23 plotting-only (retained archive), ~29 vendored third-party BSD (retained archive).
+
 ## [2026-04-15] - Legacy Migration Checkpoint
 
 ### Added

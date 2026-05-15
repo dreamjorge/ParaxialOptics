@@ -215,7 +215,7 @@ Simulation_Scripts/
 │   ├── FFTUtils.m
 │   ├── AnalysisUtils.m
 │   ├── PolynomialUtils.m
-│   └── Addons/               ← Helper functions
+│   └── Addons/               ← Archive-only: plotting utilities, vendored third-party (BSD); NOT runtime-required
 ├── examples/                  ← Usage examples
 │   ├── canonical/
 │   │   ├── MainGauss_refactored.m
