@@ -3,8 +3,6 @@
 
 repoRoot = fullfile(fileparts(fileparts(fileparts(mfilename('fullpath')))));
 addpath(fullfile(repoRoot, 'ParaxialBeams'));
-addpath(fullfile(repoRoot, 'src', 'parameters'));
-addpath(fullfile(repoRoot, 'src', 'computation'));
 
 fprintf('=== ElegantLaguerreParameters Tests ===\n\n');
 passed = 0;

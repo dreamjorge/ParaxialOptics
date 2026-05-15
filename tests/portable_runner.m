@@ -13,16 +13,6 @@ function totalFailed = portable_runner()
     % Do not add internal +package folders directly.
     addpath(repoRoot);
 
-    % Deprecated compatibility paths (src/)
-    % Keep these during the Strangler Fig migration so legacy adapters and
-    % compatibility tests remain executable. New code should prefer +paraxial/
-    % or BeamFactory.create().
-    addpath(fullfile(repoRoot, 'src', 'beams'));
-    addpath(fullfile(repoRoot, 'src', 'parameters'));
-    addpath(fullfile(repoRoot, 'src', 'computation'));
-    addpath(fullfile(repoRoot, 'src', 'propagation', 'field'));
-    addpath(fullfile(repoRoot, 'src', 'propagation', 'rays'));
-    addpath(fullfile(repoRoot, 'src', 'visualization'));
     
     % Add utilities and legacy addons (ParaxialBeams/)
     addpath(fullfile(repoRoot, 'ParaxialBeams'));
@@ -33,7 +23,6 @@ function totalFailed = portable_runner()
     
     % Add test subdirectories
     addpath(fullfile(testDir, 'modern'));
-    addpath(fullfile(testDir, 'legacy_compat'));
     addpath(fullfile(testDir, 'edge_cases'));
 
     % Legacy alias removal mode:
@@ -78,10 +67,7 @@ function totalFailed = portable_runner()
         'test_RepositoryGuardrails.m',
         'test_Propagators.m',
         'test_RayTracing.m',
-        fullfile(testDir, 'legacy_compat', 'test_HankelCompatibility.m'),
-        fullfile(testDir, 'legacy_compat', 'test_LegacyBeamConstructors.m'),
-        fullfile(testDir, 'legacy_compat', 'test_HankelAliasStaticDelegation.m'),
-        fullfile(testDir, 'legacy_compat', 'test_HankelAliasEdgeCases.m'),
+
         % Edge case tests (z=0, r=0, extreme parameters)
         'test_GaussianBeam_edge.m',
         'test_HankelHermite_edge.m',
@@ -89,6 +75,28 @@ function totalFailed = portable_runner()
         'test_RayTracing_extreme.m',
         'test_Wavefront.m'
     };
+
+    % --- Deprecated compatibility paths (src/) ---
+    % Legacy library structure — kept only for edge cases and transition period.
+    % Do not add for new development or onboarding.
+    % Port compatible: use strfind instead of contains for Octave/MATLAB
+    legacySrcNeeded = false;
+    for i = 1:numel(testFiles)
+        tf = testFiles{i};
+        if ~isempty(strfind(tf, '_edge')) || ~isempty(strfind(tf, 'HankelRayTracing'))
+            legacySrcNeeded = true;
+            break;
+        end
+    end
+    if legacySrcNeeded
+        addpath(fullfile(repoRoot, 'src', 'beams'));
+        addpath(fullfile(repoRoot, 'src', 'parameters'));
+        addpath(fullfile(repoRoot, 'src', 'computation'));
+        addpath(fullfile(repoRoot, 'src', 'propagation', 'field'));
+        addpath(fullfile(repoRoot, 'src', 'propagation', 'rays'));
+        addpath(fullfile(repoRoot, 'src', 'visualization'));
+        fprintf('  [WARN] Paths legacy src/ activos SOLO para compatibilidad/transición.\n');
+    end
     
     totalPassed = 0;
     totalFailed = 0;

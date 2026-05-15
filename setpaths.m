@@ -22,20 +22,10 @@ function setpaths()
 
     scriptPath = fileparts(mfilename('fullpath'));
 
-    %% Legacy library structure (src/) — backward compatibility
-    addpath(fullfile(scriptPath, 'src', 'beams'));
-    addpath(fullfile(scriptPath, 'src', 'parameters'));
-    addpath(fullfile(scriptPath, 'src', 'computation'));
-    addpath(fullfile(scriptPath, 'src', 'propagation', 'field'));
-    addpath(fullfile(scriptPath, 'src', 'propagation', 'rays'));
-    addpath(fullfile(scriptPath, 'src', 'visualization'));
-
-    %% +paraxial namespace package
-    % MATLAB/Octave packages are resolved by adding the parent directory.
-    % Do not add internal +package folders directly; doing so pollutes
-    % unqualified class resolution and produces Octave package-path warnings.
-    addpath(scriptPath);
-    addpath(fullfile(scriptPath, 'ParaxialBeams'));     % BeamFactory and utilities
+    %% Modern package (+paraxial/):
+    % Recomendada para desarrollo, onboarding y uso actual.
+    addpath(scriptPath); % +paraxial parent (namespace canonical)
+    addpath(fullfile(scriptPath, 'ParaxialBeams'));     % BeamFactory y utilidades
     addpath(fullfile(scriptPath, 'ParaxialBeams', 'Addons'));
 
     %% Legacy compatibility aliases
@@ -44,5 +34,16 @@ function setpaths()
     %% Tests
     addpath(fullfile(scriptPath, 'tests'));
 
-    fprintf('Path configured for Simulation_Scripts (dual-path: src/ + +paraxial/)\n');
+    %% Legacy library structure (src/) — USO RESTRINGIDO
+    % Solo necesario para correr scripts heredados o en sesiones de migración.
+    % No es necesario para el uso moderno ni para el onboarding/documentación.
+    % Para compatibilidad temporal, descomentar el bloque siguiente únicamente si es requerido:
+    % addpath(fullfile(scriptPath, 'src', 'beams'));
+    % addpath(fullfile(scriptPath, 'src', 'parameters'));
+    % addpath(fullfile(scriptPath, 'src', 'computation'));
+    % addpath(fullfile(scriptPath, 'src', 'propagation', 'field'));
+    % addpath(fullfile(scriptPath, 'src', 'propagation', 'rays'));
+    % addpath(fullfile(scriptPath, 'src', 'visualization'));
+
+    fprintf('Path configurado para Simulation_Scripts (solo +paraxial/). Legacy src/ solo habilitar si es estrictamente necesario.\n');
 end
