@@ -127,5 +127,49 @@ classdef RayBundle < handle
             Y = [top_y, right_y, bottom_y, left_y] + y0;
             bundle = RayBundle(X, Y, z0);
         end
+
+        function bundle = createSquareGrid(Nx, Ny, size, z0)
+            % CREATESQUAREGRID — Uniform rectangular grid bundle.
+            %
+            % Inputs:
+            %   Nx, Ny : grid dimensions (number of rays along x and y)
+            %   size  : side length of the square domain (m)
+            %   z0    : initial z position (default: 0)
+            %
+            % Output:
+            %   bundle : RayBundle with Nx*Ny rays in a regular grid
+
+            if nargin < 4, z0 = 0; end
+
+            [X, Y] = meshgrid(linspace(-size/2, size/2, Nx), linspace(-size/2, size/2, Ny));
+            bundle = RayBundle(X, Y, z0);
+        end
+
+        function bundle = createGaussianWeighted(Nx, Ny, w0, sigma, z0)
+            % CREATEGAUSSIANWEIGHTED — Grid bundle with Gaussian intensity weighting.
+            %
+            % Rays are sampled on a regular grid and weighted by a Gaussian
+            % intensity profile. This samples more rays near the beam axis where
+            % the field amplitude is highest, improving representativeness for
+            % beams whose energy is concentrated near the center.
+            %
+            % Inputs:
+            %   Nx, Ny  : grid dimensions (number of rays along x and y)
+            %   w0      : beam waist for Gaussian weighting (m)
+            %   sigma   : fraction of w0 for grid half-width (default: 1.0)
+            %             The grid spans [-sigma*w0, sigma*w0] in both dimensions.
+            %   z0      : initial z position (default: 0)
+            %
+            % Output:
+            %   bundle  : RayBundle with Nx*Ny rays on a regular grid,
+            %             weighted by exp(-r^2/w0^2)
+
+            if nargin < 5, z0 = 0; end
+            if nargin < 4, sigma = 1.0; end
+
+            range = sigma * w0;
+            [X, Y] = meshgrid(linspace(-range, range, Nx), linspace(-range, range, Ny));
+            bundle = RayBundle(X, Y, z0);
+        end
     end
 end

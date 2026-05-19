@@ -1,5 +1,5 @@
 classdef RayTracer < handle
-    % RayTracer — Phase-gradient ray tracing via local wavevector direction.
+    % RayTracer - Phase-gradient ray tracing via local wavevector direction.
     %
     % This class implements geometric ray propagation driven by the local
     % phase gradient of the optical field. In paraxial approximation, the
@@ -22,7 +22,7 @@ classdef RayTracer < handle
     %   sx = dx/dz ≈ (1/k)·∂φ/∂x
     %   sy = dy/dz ≈ (1/k)·∂φ/∂y
     %
-    % This is equivalent to the Wentzel–Kramers–Brillouin (WKB) ansatz for
+    % This is equivalent to the Wentzel-Kramers-Brillouin (WKB) ansatz for
     % high-frequency fields. See Born & Wolf, "Principles of Optics", §3.1.2.
     %
     % ============================================================================
@@ -32,17 +32,17 @@ classdef RayTracer < handle
     % The phase derivative ∂φ/∂x can be computed without explicit phase
     % unwrapping using the complex field identity:
     %
-    %   ∂φ/∂x = Im{ u* · ∂u/∂x } / |u|²
+    %   ∂φ/∂x = Im{ u* · ∂u/∂x } / |u|2
     %
-    % Proof: Write u = A·exp(iφ). Then u*·∂u/∂x = A²·(∂φ/∂x + i·∂A/∂x).
-    % Taking the imaginary part: Im{u*·∂u/∂x} = A²·∂φ/∂x = |u|²·∂φ/∂x.
-    % Hence: ∂φ/∂x = Im{u*·∂u/∂x} / |u|². QED.
+    % Proof: Write u = A·exp(iφ). Then u*·∂u/∂x = A2·(∂φ/∂x + i·∂A/∂x).
+    % Taking the imaginary part: Im{u*·∂u/∂x} = A2·∂φ/∂x = |u|2·∂φ/∂x.
+    % Hence: ∂φ/∂x = Im{u*·∂u/∂x} / |u|2. QED.
     %
     % This formulation:
     %   (a) Avoids unwrap(), which fails near phase singularities (vortices,
-    %       zeros, branch cuts) — a well-known problem in interferometric
+    %       zeros, branch cuts) - a well-known problem in interferometric
     %       and holographic analysis.
-    %   (b) Is O(1) in memory — no global phase accumulation.
+    %   (b) Is O(1) in memory - no global phase accumulation.
     %   (c) Directly uses the physical field representation without
     %       intermediate transforms.
     %
@@ -62,15 +62,15 @@ classdef RayTracer < handle
     %
     %   ∂u/∂x ≈ (u(x+δ) - u(x-δ)) / (2δ)
     %
-    % Central difference has truncation error O(δ²), vs O(δ) for forward
-    % or backward differences. For a Gaussian beam with waist w₀ and
-    % λ = 632.8 nm, the field curvature varies on scale w₀. Using δ ≈ λ
-    % gives relative error ~ (λ/w₀)² ≈ 10⁻⁸ for w₀ = 100 µm, which is
+    % Central difference has truncation error O(δ2), vs O(δ) for forward
+    % or backward differences. For a Gaussian beam with waist w0 and
+    % λ = 632.8 nm, the field curvature varies on scale w0. Using δ ≈ λ
+    % gives relative error ~ (λ/w0)2 ≈ 10-8 for w0 = 100 μm, which is
     % negligible compared to other approximations.
     %
-    % The step δ = max(λ, |x|·10⁻⁴, |y|·10⁻⁴, w₀·10⁻⁴) adapts to:
+    % The step δ = max(λ, |x|·10-4, |y|·10-4, w0·10-4) adapts to:
     %   - Near axis (small x,y): δ ≈ λ, avoiding cancellation from
-    %     |x|·10⁻⁴ being smaller than machine epsilon.
+    %     |x|·10-4 being smaller than machine epsilon.
     %   - Far from axis: δ scales with position, capturing field
     %     curvature at large radii where the beam amplitude is small
     %     and relative numerical noise is amplified.
@@ -81,17 +81,17 @@ classdef RayTracer < handle
     % REGULARIZATION
     % ============================================================================
     %
-    % At zeros of the field (e.g., vortex cores, intensity nulls), |u|² → 0
-    % and the ratio becomes numerically unstable. We add ε = 10⁻¹² to the
+    % At zeros of the field (e.g., vortex cores, intensity nulls), |u|2 → 0
+    % and the ratio becomes numerically unstable. We add ε = 10-12 to the
     % denominator:
     %
-    %   ∇φ ≈ Im{u*·∇u} / (|u|² + ε)
+    %   ∇φ ≈ Im{u*·∇u} / (|u|2 + ε)
     %
-    % This is a Tikhonov-like regularization. The value ε = 10⁻¹² is:
-    %   - Small enough: |u|² >> ε in regions with physically meaningful signal.
-    %   - Large enough: ratio stays finite even when |u|² ~ 10⁻²⁴ (machine
+    % This is a Tikhonov-like regularization. The value ε = 10-12 is:
+    %   - Small enough: |u|2 >> ε in regions with physically meaningful signal.
+    %   - Large enough: ratio stays finite even when |u|2 ~ 10-24 (machine
     %     epsilon in double precision).
-    %   - Consistent with double-precision IEEE 754 (≈2.2·10⁻³⁰⁸ min normalized).
+    %   - Consistent with double-precision IEEE 754 (≈2.2·10-308 min normalized).
     %
     % ============================================================================
     % INTEGRATION: EULER vs RUNGE-KUTTA 4
@@ -99,20 +99,20 @@ classdef RayTracer < handle
     %
     % The slope (sx, sy) is a direction vector. We integrate:
     %
-    %   Euler:   (x₁,y₁) = (x₀,y₀) + (sx,sy)·dz
+    %   Euler:   (x1,y1) = (x0,y0) + (sx,sy)·dz
     %
     %   RK4:     Weighted average of 4 slope evaluations:
-    %            k₁ = f(t₀,        y₀)
-    %            k₂ = f(t₀+dz/2,  y₀+dz·k₁/2)
-    %            k₃ = f(t₀+dz/2,  y₀+dz·k₂/2)
-    %            k₄ = f(t₀+dz,    y₀+dz·k₃)
-    %            y₁ = y₀ + dz·(k₁+2k₂+2k₃+k₄)/6
+    %            k1 = f(t0,        y0)
+    %            k2 = f(t0+dz/2,  y0+dz·k1/2)
+    %            k3 = f(t0+dz/2,  y0+dz·k2/2)
+    %            k4 = f(t0+dz,    y0+dz·k3)
+    %            y1 = y0 + dz·(k1+2k2+2k3+k4)/6
     %
-    % Local truncation error: Euler O(dz²), RK4 O(dz⁴).
-    % For a Rayleigh range zᵣ = πw₀²/λ ≈ 0.05 m (w₀=100µm, λ=632nm)
-    % and dz = zᵣ/10 ≈ 5·10⁻³ m, the accumulated error over 20 steps:
-    %   - Euler:  ≈ 20·O(dz²) ≈ 20·2.5·10⁻⁵ ≈ 5·10⁻⁴ m (significant)
-    %   - RK4:    ≈ 20·O(dz⁴) ≈ 20·6·10⁻¹⁰ ≈ 1·10⁻⁸ m (negligible)
+    % Local truncation error: Euler O(dz2), RK4 O(dz4).
+    % For a Rayleigh range zr = πw02/λ ≈ 0.05 m (w0=100μm, λ=632nm)
+    % and dz = zr/10 ≈ 5·10-3 m, the accumulated error over 20 steps:
+    %   - Euler:  ≈ 20·O(dz2) ≈ 20·2.5·10-5 ≈ 5·10-4 m (significant)
+    %   - RK4:    ≈ 20·O(dz4) ≈ 20·6·10-10 ≈ 1·10-8 m (negligible)
     %
     % RK4 is the default method.
     %
@@ -128,7 +128,7 @@ classdef RayTracer < handle
             % PROPAGATE — Integrate ray bundle along z axis.
             %
             % Inputs:
-            %   bundle   : RayBundle with initial conditions (x₀, y₀, z₀)
+            %   bundle   : RayBundle with initial conditions (x0, y0, z0)
             %   beam     : ParaxialBeam whose phase gradient drives the rays
             %   z_final  : target z (m)
             %   dz       : integration step in z (m)
@@ -155,8 +155,8 @@ classdef RayTracer < handle
                     x1 = x0 + sx * dz;
                     y1 = y0 + sy * dz;
                 else
-                    % Runge-Kutta 4th order ( Butcher tableau: c₂=c₃=1/2, a₂₁=a₃₂=1/2,
-                    % a₄₃=1, b=[1,2,2,1]/6 )
+                    % Runge-Kutta 4th order ( Butcher tableau: c2=c3=1/2, a21=a32=1/2,
+                    % a43=1, b=[1,2,2,1]/6 )
                     [k1x, k1y] = RayTracer.calculateSlopes(beam, x0,       y0,       z0);
                     [k2x, k2y] = RayTracer.calculateSlopes(beam, x0+k1x*dz/2, y0+k1y*dz/2, z0+dz/2);
                     [k3x, k3y] = RayTracer.calculateSlopes(beam, x0+k2x*dz/2, y0+k2y*dz/2, z0+dz/2);
@@ -176,8 +176,84 @@ classdef RayTracer < handle
         end
 
 
+        function bundleOut = propagateToPlanes(bundleIn, beam, zPlanes, dzInternal, method)
+            % PROPAGATETOPLANES — Propagate with internal substeps, sample at fixed z planes.
+            %
+            % Unlike propagate() which takes a single target z, this method
+            % returns ray states exactly at every user-specified z plane.
+            % Used for overlay-consistent visualization where rays and field
+            % must be indexed by the same z grid.
+            %
+            % Inputs:
+            %   bundleIn   : initial RayBundle (uses last slice as starting state)
+            %   beam       : beam model
+            %   zPlanes    : monotonically increasing vector of z sample planes
+            %   dzInternal : internal integration step (scalar > 0)
+            %   method     : 'RK4' (default) or 'Euler'
+            %
+            % Output:
+            %   bundleOut  : RayBundle sampled exactly at zPlanes
+
+            if nargin < 5 || isempty(method), method = 'RK4'; end
+            if nargin < 4 || isempty(dzInternal), dzInternal = []; end
+
+            if isempty(zPlanes)
+                bundleOut = bundleIn;
+                return;
+            end
+
+            zPlanes = zPlanes(:).';
+            if any(diff(zPlanes) < 0)
+                error('zPlanes must be monotonically increasing.');
+            end
+
+            % Current state from input bundle last slice
+            x0 = bundleIn.x(:,:,end);
+            y0 = bundleIn.y(:,:,end);
+            z0 = bundleIn.z(:,:,end);
+
+            zStart = z0(1,1);
+            if abs(zPlanes(1) - zStart) > 1e-15
+                error('zPlanes(1) must match initial bundle z (%.6e).', zStart);
+            end
+
+            % Output bundle starts at initial state only (fixed-plane samples)
+            bundleOut = RayBundle(x0, y0, zStart);
+
+            for kk = 2:numel(zPlanes)
+                zTarget = zPlanes(kk);
+                if zTarget < zStart
+                    error('zPlanes must be increasing and >= initial z.');
+                end
+
+                % Internal step for this interval
+                if isempty(dzInternal)
+                    dzStep = max((zTarget - zStart) / 20, eps);
+                else
+                    dzStep = dzInternal;
+                end
+
+                % Propagate from current state to current target using internal steps
+                bTmp = RayTracer.propagate(RayBundle(x0, y0, zStart), ...
+                                           beam, zTarget, dzStep, method);
+
+                x1 = bTmp.x(:,:,end);
+                y1 = bTmp.y(:,:,end);
+                z1 = bTmp.z(:,:,end);
+                sx1 = bTmp.sx(:,:,end);
+                sy1 = bTmp.sy(:,:,end);
+
+                bundleOut.addStep(x1, y1, z1, sx1, sy1);
+
+                % advance state
+                x0 = x1; y0 = y1; z0 = z1;
+                zStart = z0(1,1);
+            end
+        end
+
+
         function [sx, sy] = calculateSlopes(beam, x, y, z)
-            % CALCULATESLOPES — Local ray slopes from phase gradient.
+            % CALCULATESLOPES - Local ray slopes from phase gradient.
             %
             % Computes (sx, sy) = (dx/dz, dy/dz) from the complex field.
             % This is the paraxial eikonal relation:
@@ -233,16 +309,16 @@ classdef RayTracer < handle
         %
         %  Form the product u* · ∂u/∂x:
         %    u* · ∂u/∂x = A·exp(-iφ) · (∂A/∂x + i·A·∂φ/∂x)·exp(iφ)
-        %               = A·∂A/∂x + i·A²·∂φ/∂x
+        %               = A·∂A/∂x + i·A2·∂φ/∂x
         %
         %  Taking the imaginary part:
-        %    Im{u* · ∂u/∂x} = A² · ∂φ/∂x = |u|² · ∂φ/∂x
+        %    Im{u* · ∂u/∂x} = A2 · ∂φ/∂x = |u|2 · ∂φ/∂x
         %
         %  Therefore:
-        %    ∂φ/∂x = Im{u* · ∂u/∂x} / |u|²
+        %    ∂φ/∂x = Im{u* · ∂u/∂x} / |u|2
         %
         %  In regularized form:
-        %    ∂φ/∂x ≈ Im{u* · ∂u/∂x} / (|u|² + ε)
+        %    ∂φ/∂x ≈ Im{u* · ∂u/∂x} / (|u|2 + ε)
         %
         %  Similarly for ∂φ/∂y.
         %
@@ -256,12 +332,12 @@ classdef RayTracer < handle
         %% =======================================================================
 
         function [sx, sy] = calculatePhaseGradientComplex(beam, x, y, z)
-            % CALCULATEPHASEGRADIENTCOMPLEX — Phase gradient via complex field.
+            % CALCULATEPHASEGRADIENTCOMPLEX - Phase gradient via complex field.
             %
             % Computes ∂φ/∂x and ∂φ/∂y from u(x,y,z) using:
             %
-            %   ∂φ/∂x = Im{ u* · ∂u/∂x } / |u|²
-            %   ∂φ/∂y = Im{ u* · ∂u/∂y } / |u|²
+            %   ∂φ/∂x = Im{ u* · ∂u/∂x } / |u|2
+            %   ∂φ/∂y = Im{ u* · ∂u/∂y } / |u|2
             %
             % where ∂u/∂x and ∂u/∂y are approximated by central difference.
             %
@@ -280,7 +356,7 @@ classdef RayTracer < handle
             w0     = beam.InitialWaist;
             lambda = beam.Lambda;
             delta_matrix = RayTracer.resolveDelta(x, y, w0, lambda);  % see §NUMERICAL METHOD
-            % FIX: delta must be scalar for central difference — take max across
+            % FIX: delta must be scalar for central difference - take max across
             % the bundle to ensure consistent perturbation scale across all rays
             delta = max(delta_matrix(:));
 
@@ -291,15 +367,15 @@ classdef RayTracer < handle
             u_yp = beam.opticalField(x,      y+delta, z);
             u_ym = beam.opticalField(x,      y-delta, z);
 
-            % Central difference: ∂u/∂x ≈ (u₊ - u₋) / (2δ)
+            % Central difference: ∂u/∂x ≈ (u+ - u-) / (2δ)
             dudx = (u_xp - u_xm) / (2 * delta);
             dudy = (u_yp - u_ym) / (2 * delta);
 
-            % Complex conjugate of field and |u|²
+            % Complex conjugate of field and |u|2
             u0_conj  = conj(u0);
-            abs_u0_sq = real(u0_conj .* u0);  % |u|² (faster than abs(u0).^2)
+            abs_u0_sq = real(u0_conj .* u0);  % |u|2 (faster than abs(u0).^2)
 
-            % Phase gradient via Im{u*·∇u} / |u|², then convert to
+            % Phase gradient via Im{u*·∇u} / |u|2, then convert to
             % paraxial slopes sx = (1/k) * dphi/dx, sy = (1/k) * dphi/dy.
             sx_num = imag(u0_conj .* dudx);
             sy_num = imag(u0_conj .* dudy);
@@ -314,7 +390,7 @@ classdef RayTracer < handle
 
 
         function delta = resolveDelta(x, y, w0, lambda)
-            % RESOLVEDELTA — Adaptive perturbation for central difference.
+            % RESOLVEDELTA - Adaptive perturbation for central difference.
             %
             % The optimal δ depends on the local spatial scale to avoid:
             %   (a) Cancellation: δ too small → subtract two nearly equal
@@ -322,24 +398,24 @@ classdef RayTracer < handle
             %   (b) Truncation bias: δ too large → derivatives smoothed
             %       over scale larger than field variation.
             %
-            % The formula δ = max(λ, |x|·10⁻⁴, |y|·10⁻⁴, w₀·10⁻⁴)
+            % The formula δ = max(λ, |x|·10-4, |y|·10-4, w0·10-4)
             % balances these:
             %
             %   - λ:       Physical scale of wave-like variation; no δ < λ
             %               can resolve sub-wavelength features (Nyquist).
-            %   - |x|·10⁻⁴: Scale proportional to distance from axis.
+            %   - |x|·10-4: Scale proportional to distance from axis.
             %               Dominates at large radii where beam amplitude
             %               is small and numerical noise in A·exp(iφ)
-            %               is amplified by 1/|u|² near zeros.
-            %   - w₀·10⁻⁴: Scale proportional to beam waist.
-            %               Dominates near axis where |x|,|y| << w₀.
+            %               is amplified by 1/|u|2 near zeros.
+            %   - w0·10-4: Scale proportional to beam waist.
+            %               Dominates near axis where |x|,|y| << w0.
             %
-            % The factor 10⁻⁴ is empirically chosen: it gives δ ≈ 10 nm
-            % near axis for w₀ = 100 µm, matching λ ≈ 633 nm scale while
-            % providing ≈10⁴ margin above double-precision machine epsilon.
+            % The factor 10-4 is empirically chosen: it gives δ ≈ 10 nm
+            % near axis for w0 = 100 μm, matching λ ≈ 633 nm scale while
+            % providing ≈104 margin above double-precision machine epsilon.
             %
             % Input:
-            %   x, y   : position(s) — scalar or matrix
+            %   x, y   : position(s) - scalar or matrix
             %   w0     : beam waist (m)
             %   lambda : wavelength (m)
             %
@@ -357,7 +433,7 @@ classdef RayTracer < handle
         %% =======================================================================
 
         function [hasVortex] = beamHasVortex(beam)
-            % BEAMHASVORTEX — Detect beams with azimuthal phase singularities.
+            % BEAMHASVORTEX - Detect beams with azimuthal phase singularities.
             %
             % HankelLaguerre beams with l ≠ 0 carry orbital angular momentum
             % and have a phase vortex (undefined phase) at the optical axis r=0.
@@ -391,7 +467,7 @@ classdef RayTracer < handle
         %
         %  Gradient transform:
         %    ∇φ = ∂φ/∂r · (x̂/r) + ∂φ/∂θ · (θ̂/r)
-        %       = ∂φ/∂r · (x/r, y/r) + ∂φ/∂θ · (-y/r², x/r²)
+        %       = ∂φ/∂r · (x/r, y/r) + ∂φ/∂θ · (-y/r2, x/r2)
         %
         %  References:
         %    - Allen92: L. Allen et al., "Orbital angular momentum of
@@ -400,7 +476,7 @@ classdef RayTracer < handle
         %% =======================================================================
 
         function [sx, sy] = calculatePhaseGradientPolar(beam, x, y, z)
-            % CALCULATEPHASEGRADIENTPOLAR — Phase gradient in polar coordinates.
+            % CALCULATEPHASEGRADIENTPOLAR - Phase gradient in polar coordinates.
             %
             % For HankelLaguerre beams with l ≠ 0, the phase structure
             % exp(i·l·θ) makes Cartesian central-difference fail at θ=0, π
@@ -408,8 +484,8 @@ classdef RayTracer < handle
             % in polar coordinates, where the vortex is naturally handled.
             %
             % The gradient is transformed to Cartesian via:
-            %   sx = (1/k)·[dφ/dr · x/r - dφ/dθ · y/r²]
-            %   sy = (1/k)·[dφ/dr · y/r + dφ/dθ · x/r²]
+            %   sx = (1/k)·[dφ/dr · x/r - dφ/dθ · y/r2]
+            %   sy = (1/k)·[dφ/dr · y/r + dφ/dθ · x/r2]
             %
             % Inputs:
             %   beam  : HankelLaguerre beam with l ≠ 0
@@ -455,7 +531,7 @@ classdef RayTracer < handle
             dudr = (u_rp - u_rm) ./ (2 * delta_r);
             dudt = (u_tp - u_tm) ./ (2 .* delta_theta);
 
-            % Phase gradients via Im{u*·∇u} / |u|²
+            % Phase gradients via Im{u*·∇u} / |u|2
             u0_conj  = conj(u0);
             abs_u0_sq = real(u0_conj .* u0);
 
@@ -463,11 +539,11 @@ classdef RayTracer < handle
             dphidt = imag(u0_conj .* dudt) ./ (abs_u0_sq + epsilon);
 
             % Transform polar gradients to Cartesian
-            % ∇φ = ∂φ/∂r · (x/r, y/r) + ∂φ/∂θ · (-y/r², x/r²)
-            % sx = (1/k)·[dphidr·x/R - dphidt·y/R²]
-            % sy = (1/k)·[dphidr·y/R + dphidt·x/R²]
+            % ∇φ = ∂φ/∂r · (x/r, y/r) + ∂φ/∂θ · (-y/r2, x/r2)
+            % sx = (1/k)·[dphidr·x/R - dphidt·y/R2]
+            % sy = (1/k)·[dphidr·y/R + dphidt·x/R2]
             R_reg = R + eps;      % avoid division by zero (x/R, y/R terms)
-            R_sq  = R .^ 2 + eps; % avoid division by zero (x/R², y/R² terms)
+            R_sq  = R .^ 2 + eps; % avoid division by zero (x/R2, y/R2 terms)
 
             sx = (dphidr .* x ./ R_reg - dphidt .* y ./ R_sq) ./ k;
             sy = (dphidr .* y ./ R_reg + dphidt .* x ./ R_sq) ./ k;
