@@ -1,6 +1,6 @@
 [package]
 name=simulation_scripts
-version=__VERSION__
+version=1.0.0
 author=Ugalde-Ontiveros J.A.
 maintainer=jorge-kun@live.com
 description=Paraxial beam propagation and wavefront analysis in Octave and MATLAB
