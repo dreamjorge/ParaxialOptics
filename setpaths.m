@@ -25,8 +25,17 @@ function setpaths()
     %% Modern package (+paraxial/):
     % Recomendada para desarrollo, onboarding y uso actual.
     addpath(scriptPath); % +paraxial parent (namespace canonical)
-    addpath(fullfile(scriptPath, 'ParaxialBeams'));     % BeamFactory y utilidades
+    % Add package subdirectories for Octave compatibility
+    addpath(fullfile(scriptPath, '+paraxial', '+beams'));
+    addpath(fullfile(scriptPath, '+paraxial', '+parameters'));
+    addpath(fullfile(scriptPath, '+paraxial', '+computation'));
+    addpath(fullfile(scriptPath, '+paraxial', '+propagation', '+field'));
+    addpath(fullfile(scriptPath, '+paraxial', '+propagation', '+rays'));
+    addpath(fullfile(scriptPath, '+paraxial', '+visualization'));
+    % Utilities
+    addpath(fullfile(scriptPath, 'ParaxialBeams'));
     addpath(fullfile(scriptPath, 'ParaxialBeams', 'Addons'));
+    addpath(fullfile(scriptPath, 'ParaxialBeams', 'Addons', 'Plots_Functions'));
 
     %% Legacy compatibility aliases
     addpath(fullfile(scriptPath, 'legacy', 'compat'));

@@ -272,16 +272,19 @@ classdef HankelLaguerre < ParaxialBeam
             ht     = obj.HankelType;
             zr     = pi * w0^2 / lambda;
 
-            w   = w0 * sqrt(1 + (z/zr)^2);
-            Rc  = z  * (1 + (zr/z)^2);
-            if z == 0, Rc = Inf; end
-            psi = atan2(z, zr);
+            % Ensure z is scalar (RayBundle may pass matrix z)
+            z_scalar = z(1);
+
+            w   = w0 * sqrt(1 + (z_scalar/zr)^2);
+            Rc  = z_scalar * (1 + (zr/z_scalar)^2);
+            if z_scalar == 0, Rc = Inf; end
+            psi = atan2(z_scalar, zr);
 
             % Gaussian carrier field u_0(r,z)
             [TH, R] = cart2pol(X, Y);
             r          = R;
             amplitude  = (w0 ./ w) .* exp(-r.^2 ./ w.^2);
-            phase_z    = -1i * k * z;
+            phase_z    = -1i * k * z_scalar;
             phase_curv = 1i * k * r.^2 ./ (2 * Rc);
             phase_curv(isinf(Rc)) = 0;
             phase_gouy = -1i * psi;
@@ -294,8 +297,8 @@ classdef HankelLaguerre < ParaxialBeam
             lbBeam  = LaguerreBeam(w0, lambda, l, p);
             xlgBeam = XLaguerreBeam(w0, lambda, l, p);
 
-            LB  = lbBeam.opticalField(X, Y, z);
-            XLG = xlgBeam.opticalField(X, Y, z);
+            LB  = lbBeam.opticalField(X, Y, z_scalar);
+            XLG = xlgBeam.opticalField(X, Y, z_scalar);
 
             % Hankel superposition
             if ht == 1
@@ -314,6 +317,9 @@ end
 function field = hankelField(r, theta, w0, lambda, l, p, z, hankelType)
     % hankelField - Compute H^(1) or H^(2) Hankel-Laguerre field at depth z.
     %
+    % Ensure z is scalar (may be passed as matrix from RayBundle.z)
+    if ~isscalar(z), z = z(1); end
+
     % Project phase convention (same as LaguerreBeam):
     %   exp(-i*k*z) axial carrier.
     % Therefore, total LG phase is:
