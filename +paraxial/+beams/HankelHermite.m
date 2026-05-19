@@ -158,15 +158,22 @@ classdef HankelHermite < ParaxialBeam
             m      = obj.m;
             ht     = obj.HankelType;
 
-            w   = w0 * sqrt(1 + (z/zr)^2);
-            Rc  = z  * (1 + (zr/z)^2);
-            if z == 0, Rc = Inf; end
-            psi = atan2(z, zr);
+            % Ensure z is scalar (RayBundle may pass matrix z, but field
+            % is computed at a single z-plane)
+            z_scalar = z(1);
+            if ~isscalar(z_scalar)
+                z_scalar = z(1);
+            end
+
+            w   = w0 * sqrt(1 + (z_scalar/zr)^2);
+            Rc  = z_scalar * (1 + (zr/z_scalar)^2);
+            if z_scalar == 0, Rc = Inf; end
+            psi = atan2(z_scalar, zr);
 
             % Gaussian carrier field u_0(r,z)
             r          = sqrt(X.^2 + Y.^2);
             amplitude  = (w0 ./ w) .* exp(-r.^2 ./ w.^2);
-            phase_z    = -1i * k * z;
+            phase_z    = -1i * k * z_scalar;
             phase_curv = 1i * k * r.^2 ./ (2 * Rc);
             phase_curv(isinf(Rc)) = 0;
             phase_gouy = -1i * psi;
@@ -179,15 +186,15 @@ classdef HankelHermite < ParaxialBeam
             hgBeam = HermiteBeam(w0, lambda, n, m);
             nhgBeam = NHermiteBeam(w0, lambda, n, m);
 
-            HGx = hgBeam.opticalField(X, Y, z);
-            NHx = nhgBeam.opticalField(X, Y, z);
+            HGx = hgBeam.opticalField(X, Y, z_scalar);
+            NHx = nhgBeam.opticalField(X, Y, z_scalar);
 
             % For y, reuse same beams with swapped orders
             hgBeam_y = HermiteBeam(w0, lambda, m, n);
             nhgBeam_y = NHermiteBeam(w0, lambda, m, n);
 
-            HGy = hgBeam_y.opticalField(X, Y, z);
-            NHy = nhgBeam_y.opticalField(X, Y, z);
+            HGy = hgBeam_y.opticalField(X, Y, z_scalar);
+            NHy = nhgBeam_y.opticalField(X, Y, z_scalar);
 
             % Hankel combination per type
             switch ht
@@ -214,6 +221,8 @@ classdef HankelHermite < ParaxialBeam
         end
 
         function params = getParameters(obj, z)
+            % Ensure z is scalar (may be passed as matrix from RayBundle.z)
+            if ~isscalar(z), z = z(1); end
             params = GaussianParameters(z, obj.InitialWaist, obj.Lambda);
         end
 
@@ -286,12 +295,15 @@ function field = hankelHermiteField(X, Y, w0, lambda, n, m, z, hankelType)
     % Uses both independent series solutions [HG, NHG] of the Hermite
     % differential equation, obtained via HermiteParameters.getHermiteSolutions.
 
+    % Ensure z is scalar (may be passed as matrix from RayBundle.z)
+    if ~isscalar(z), z = z(1); end
+
     k  = 2*pi/lambda;
     zr = pi * w0.^2 ./ lambda;
 
     w   = w0 .* sqrt(1 + (z./zr).^2);
     Rc  = z  .* (1 + (zr./z).^2);
-    Rc(z == 0) = Inf;
+    if z == 0, Rc = Inf; end
     psi = atan2(z, zr);
 
     % Gaussian carrier field u_0(r,z)
