@@ -11,6 +11,10 @@ Paraxial beam propagation and wavefront analysis in GNU Octave and MATLAB.
 
 **v1.0.0** — First release. `+paraxial/` is the canonical namespace.
 
+`src/` is deprecated and only kept for backward compatibility during the Strangler Fig migration. Use `BeamFactory.create()` or direct `+paraxial/` classes.
+
+GitHub Actions is the canonical CI system for this repository. The active workflows are:
+
 Active workflows:
 - `.github/workflows/octave.yml` — Octave portable tests.
 - `.github/workflows/matlab.yml` — MATLAB portable tests.
