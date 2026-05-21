@@ -2,35 +2,35 @@
 
 All notable changes to this project are documented in this file.
 
-## [Unreleased]
+## [v1.0.0] - 2026-05-19 — First Release
 
 ### Added
-- OpenSpec change plan for cleanup and modernization alignment.
-- Repository guardrail test covering local tooling policy, active CI docs, canonical API docs, canonical examples, and BeamFactory registry.
-- Post-v2 modernization roadmap.
+- **Canonical package namespace `+paraxial/`**: Full beam propagation library in modern package format.
+- **BeamFactory.create()**: Factory API for creating beam instances by name (gaussian, hermite, laguerre, elegant_hermite, elegant_laguerre, hankel, hankel_hermite, nhermite, xlaguerre, elegant_nhermite, elegant_xlaguerre).
+- **Beam classes**: GaussianBeam, HermiteBeam, LaguerreBeam, ElegantHermiteBeam, ElegantLaguerreBeam, HankelHermite, HankelLaguerre, NHermiteBeam, XLaguerreBeam, ElegantNHermiteBeam, ElegantXLaguerreBeam.
+- **Parameter classes**: GaussianParameters, HermiteParameters, LaguerreParameters, ElegantHermiteParameters, ElegantLaguerreParameters.
+- **Field propagators**: FFTPropagator, AnalyticPropagator.
+- **Ray propagators**: RayTracer, HankelRayTracer, RayBundle, RayTracePropagator, HankelRayTracePropagator.
+- **Utilities**: GridUtils, FFTUtils, PhysicalConstants.
+- **GitHub Actions CI**: octave.yml and matlab.yml workflows for portable test suite.
+- **Release workflow**: release.yml generates Octave .tar.gz and MATLAB .mltbx packages.
+- **Portable test runner**: tests/portable_runner.m for Octave and MATLAB compatibility.
 
 ### Changed
-- Aligned documentation around GitHub Actions as canonical CI, Octave 11.1.0+ / MATLAB R2020b+ support, and `+paraxial/` / `BeamFactory` as canonical APIs.
-- Marked the root pre-merge implementation plan as historical.
+- Strangler Fig migration: `+paraxial/` is canonical, `src/` is deprecated transition adapter.
+- AGENTS.md reflects current project shape with canonical API guidance.
+- README.md updated with project structure, installation, and usage examples.
+- setpaths.m configured for `+paraxial/` only by default.
+
+### Deprecated
+- `src/` adapters are transitional. Use `BeamFactory.create()` or direct `+paraxial/` classes.
+- `examples/legacy/` contains archived research scripts (not recommended for new users).
 
 ### Removed
-- Stale CircleCI welcome-only configuration.
+- Stale CircleCI configuration.
+- Plans and migration docs moved to archive/openspec.
+- AI agent directories (.atl, .pi, .opencode, .worktrees, .agent).
 
-## [2026-04-15] - Legacy Migration Checkpoint
+## [Unreleased] — Historical
 
-### Added
-- Legacy compatibility regression suites under `tests/legacy_compat/`:
-  - `test_HankelCompatibility.m`
-  - `test_LegacyBeamConstructors.m`
-  - `test_HankelAliasStaticDelegation.m`
-  - `test_HankelAliasEdgeCases.m`
-- Legacy-only runner: `tests/legacy_compat/run_legacy_compat.m`.
-
-### Changed
-- Updated canonical test entrypoint `tests/portable_runner.m` to include legacy compatibility suites.
-- Expanded migration documentation and compatibility matrix in `docs/migration/LEGACY_MIGRATION_PLAN.md`.
-- Documented test workflow and legacy-only command in `tests/README.md`.
-
-### Fixed
-- Aligned modal Gouy phase convention across HG/LG/Elegant/Hankel beam implementations.
-- Hardened path bootstrap for legacy scripts and compatibility tests using `setpaths()` and `legacy/compat`.
+See git history for pre-v1.0.0 changes.
