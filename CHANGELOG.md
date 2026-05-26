@@ -2,6 +2,16 @@
 
 All notable changes to this project are documented in this file.
 
+## [Unreleased]
+
+### Changed
+- Build release packages from an explicit allowlist to exclude internal process and agent metadata.
+- Clarify canonical `+paraxial/` usage while preserving legacy compatibility surfaces.
+
+### Removed
+- Removed tracked local agent registry metadata from the public repository surface.
+- Archived root-level historical planning notes under `docs/archive/`.
+
 ## [v1.0.0] - 2026-05-19 — First Release
 
 ### Added

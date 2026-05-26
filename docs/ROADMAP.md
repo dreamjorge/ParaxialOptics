@@ -13,13 +13,13 @@ This roadmap tracks the active post-v2 cleanup and modernization work. Historica
 
 ## Phase 1: Repository Hygiene
 
-- Ignore local agent/tooling metadata such as `.opencode/` unless explicitly promoted to project tooling.
+- Ignore local agent/tooling metadata such as `.opencode/` and `.atl/` unless explicitly promoted to project tooling.
 - Remove stale CI/configuration surfaces that no longer reflect the active workflow.
-- Keep root-level planning documents either current or clearly marked as historical.
+- Keep root-level planning documents out of the default public surface; archive historical plans under `docs/archive/`.
 
 ## Phase 2: Documentation Alignment
 
-- Keep `README.md`, `docs/ARCHITECTURE.md`, `tests/README.md`, and `.atl/skill-registry.md` aligned on:
+- Keep `README.md`, `docs/ARCHITECTURE.md`, and `tests/README.md` aligned on:
   - GNU Octave 11.1.0+ support.
   - MATLAB R2020b+ support.
   - `tests/test_all.m` / `portable_runner()` as canonical test entrypoints.
@@ -40,7 +40,7 @@ Before tagging a release:
 - [ ] Run the portable test suite in Octave.
 - [ ] Run the portable test suite in MATLAB, when a MATLAB runner/license is available.
 - [ ] Confirm `DESCRIPTION` receives the tag-derived version in the release workflow.
-- [ ] Confirm `.github/workflows/release.yml` uploads both `.tar.gz` and `.mltbx` artifacts.
+- [ ] Confirm `.github/workflows/release.yml` stages packages through `tools/stage_release_package.sh` and uploads both `.tar.gz` and `.mltbx` artifacts.
 - [ ] Smoke-check package installation when practical.
 - [ ] Update `CHANGELOG.md`.
 

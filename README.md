@@ -11,7 +11,11 @@ Paraxial beam propagation and wavefront analysis in GNU Octave and MATLAB.
 
 **v1.0.0** — First release. `+paraxial/` is the canonical namespace.
 
+The release packages are built from an explicit allowlist. Internal planning files, agent/runtime metadata, and OpenSpec process history are not included in user-facing MATLAB/Octave packages.
+
 `src/` is deprecated and only kept for backward compatibility during the Strangler Fig migration. Use `BeamFactory.create()` or direct `+paraxial/` classes.
+
+Legacy adapters and research helpers remain available for compatibility and reproducibility. New work should target `+paraxial/` and `BeamFactory.create()`.
 
 GitHub Actions is the canonical CI system for this repository. The active workflows are:
 
