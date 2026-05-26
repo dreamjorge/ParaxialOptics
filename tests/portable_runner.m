@@ -65,6 +65,7 @@ function totalFailed = portable_runner()
         'test_BeamFactory.m',
         'test_LegacyAliasGuardrail.m',
         'test_RepositoryGuardrails.m',
+        'test_ReleasePackageHygiene.m',
         'test_Propagators.m',
         'test_RayTracing.m',
 

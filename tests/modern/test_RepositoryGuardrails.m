@@ -38,11 +38,10 @@ end
 % Documentation invariants
 % -------------------------------------------------------------------------
 readmePath = fullfile(repoRoot, 'README.md');
-registryPath = fullfile(repoRoot, '.atl', 'skill-registry.md');
 roadmapPath = fullfile(repoRoot, 'docs', 'ROADMAP.md');
 addonsInventoryPath = fullfile(repoRoot, 'docs', 'ADDONS_INVENTORY.md');
 compatReductionPath = fullfile(repoRoot, 'docs', 'COMPATIBILITY_REDUCTION.md');
-planPath = fullfile(repoRoot, 'plan.md');
+planPath = fullfile(repoRoot, 'docs', 'archive', 'pre-v1-hardening-plan.md');
 portableRunnerPath = fullfile(repoRoot, 'tests', 'portable_runner.m');
 wavefrontTestPath = fullfile(repoRoot, 'tests', 'modern', 'test_Wavefront.m');
 addonsDir = fullfile(repoRoot, 'ParaxialBeams', 'Addons');
@@ -50,11 +49,6 @@ if exist(readmePath, 'file')
     readmeContent = fileread(readmePath);
 else
     readmeContent = '';
-end
-if exist(registryPath, 'file')
-    registryContent = fileread(registryPath);
-else
-    registryContent = '';
 end
 if exist(roadmapPath, 'file')
     roadmapContent = fileread(roadmapPath);
@@ -103,11 +97,11 @@ else
     failed = failed + 1;
 end
 
-if ~isempty(strfind(registryContent, 'Octave 11.1.0+')) && isempty(strfind(registryContent, 'Octave 6+'))
-    fprintf('  PASS: skill registry Octave baseline matches public docs\n');
+if ~exist(fullfile(repoRoot, '.atl', 'skill-registry.md'), 'file')
+    fprintf('  PASS: local skill registry is not part of repository surface\n');
     passed = passed + 1;
 else
-    fprintf('  FAIL: skill registry Octave baseline is stale or inconsistent\n');
+    fprintf('  FAIL: local skill registry is still present in repository surface\n');
     failed = failed + 1;
 end
 
