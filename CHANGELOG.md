@@ -2,6 +2,14 @@
 
 All notable changes to this project are documented in this file.
 
+## [Unreleased]
+
+### Added
+- Add GitHub Pages documentation with getting started, examples, and API overview pages.
+
+### Changed
+- Label generated README figure color bars with physical/plot units: normalized intensity in arbitrary units and phase in radians.
+
 ## [v1.0.1] - 2026-05-27
 
 ### Added

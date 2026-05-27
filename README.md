@@ -7,6 +7,8 @@ Paraxial beam propagation and wavefront analysis in GNU Octave and MATLAB.
 [![Octave CI](https://github.com/dreamjorge/ParaxialOptics/actions/workflows/octave.yml/badge.svg)](https://github.com/dreamjorge/ParaxialOptics/actions/workflows/octave.yml)
 [![MATLAB CI](https://github.com/dreamjorge/ParaxialOptics/actions/workflows/matlab.yml/badge.svg)](https://github.com/dreamjorge/ParaxialOptics/actions/workflows/matlab.yml)
 
+Documentation: https://dreamjorge.github.io/ParaxialOptics/
+
 ## Project Status
 
 **v1.0.1** — Current release. `+paraxial/` is the canonical namespace.
@@ -44,6 +46,10 @@ ParaxialOptics/
 │   └── edge_cases/             # Edge case and regression tests
 ├── src/                        # Deprecated transition adapters
 ├── docs/
+│   ├── index.md                # GitHub Pages documentation home
+│   ├── getting-started.md      # Installation and first propagation workflow
+│   ├── examples.md             # Canonical example guide
+│   ├── api.md                  # Public API overview
 │   ├── ARCHITECTURE.md         # Architecture documentation
 │   ├── COMPATIBILITY_REDUCTION.md
 │   ├── ADDONS_INVENTORY.md

@@ -30,7 +30,8 @@ function generate_readme_figures()
     imagesc(x * 1e6, y * 1e6, intensity);
     axis image;
     applyReadableColormap('parula');
-    colorbar;
+    cb = colorbar;
+    ylabel(cb, 'Normalized intensity |E|^2 [a.u.]');
     xlabel('x [um]');
     ylabel('y [um]');
     title('Gaussian beam intensity at waist');
@@ -42,14 +43,22 @@ function generate_readme_figures()
     Ih = abs(hermite.opticalField(X, Y, 0)).^2;
     Il = abs(laguerre.opticalField(X, Y, 0)).^2;
 
-    fig = figure('visible', 'off', 'position', [100, 100, 960, 420]);
+    fig = figure('visible', 'off', 'position', [100, 100, 1100, 440]);
     subplot(1, 2, 1);
     imagesc(x * 1e6, y * 1e6, Ih);
-    axis image off;
+    axis image;
+    xlabel('x [um]');
+    ylabel('y [um]');
+    cb = colorbar;
+    ylabel(cb, 'Normalized intensity |E|^2 [a.u.]');
     title('Hermite-Gaussian HG_{2,1}');
     subplot(1, 2, 2);
     imagesc(x * 1e6, y * 1e6, Il);
-    axis image off;
+    axis image;
+    xlabel('x [um]');
+    ylabel('y [um]');
+    cb = colorbar;
+    ylabel(cb, 'Normalized intensity |E|^2 [a.u.]');
     title('Laguerre-Gaussian LG_{1,1}');
     applyReadableColormap('parula');
     print(fig, fullfile(outDir, 'hermite_laguerre_modes.png'), '-dpng', '-r160');
@@ -62,7 +71,8 @@ function generate_readme_figures()
     imagesc(x * 1e6, y * 1e6, phaseMap);
     axis image;
     colormap(hsv(256));
-    colorbar;
+    cb = colorbar;
+    ylabel(cb, 'Phase [rad]');
     xlabel('x [um]');
     ylabel('y [um]');
     title('Gaussian wavefront phase after propagation');
