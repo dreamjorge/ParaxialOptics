@@ -39,7 +39,7 @@ Before tagging a release:
 
 - [ ] Run the portable test suite in Octave.
 - [ ] Run the portable test suite in MATLAB, when a MATLAB runner/license is available.
-- [ ] Confirm `DESCRIPTION` receives the tag-derived version in the release workflow.
+- [ ] Confirm `DESCRIPTION` uses Octave package metadata format and receives the tag-derived version in the release workflow.
 - [ ] Confirm `.github/workflows/release.yml` stages packages through `tools/stage_release_package.sh` and uploads both `.tar.gz` and `.mltbx` artifacts.
 - [ ] Smoke-check package installation when practical.
 - [ ] Update `CHANGELOG.md`.

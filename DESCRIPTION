@@ -1,9 +1,11 @@
-[package]
-name=simulation_scripts
-version=1.0.0
-author=Ugalde-Ontiveros J.A.
-maintainer=jorge-kun@live.com
-description=Paraxial beam propagation and wavefront analysis in Octave and MATLAB
-homepage=https://github.com/dreamjorge/ParaxialOptics
-license=MIT
-depends=
+Name: simulation_scripts
+Version: 1.0.0
+Date: 2026-05-19
+Author: Ugalde-Ontiveros J.A.
+Maintainer: Jorge Ugalde-Ontiveros <jorge-kun@live.com>
+Title: ParaxialOptics
+Description: Paraxial beam propagation and wavefront analysis in GNU Octave and MATLAB.
+Categories: optics, physics, signal-processing
+Depends: octave (>= 11.1.0)
+License: MIT
+Url: https://github.com/dreamjorge/ParaxialOptics

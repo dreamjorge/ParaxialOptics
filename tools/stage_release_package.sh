@@ -28,6 +28,8 @@ copy_path "DESCRIPTION"
 copy_path "install.m"
 copy_path "uninstall.m"
 copy_path "setpaths.m"
+copy_path "COPYING"
+copy_path "PKG_ADD"
 
 if [ -f "$root_dir/LICENSE" ]; then
   copy_path "LICENSE"

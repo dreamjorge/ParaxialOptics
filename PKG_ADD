@@ -1,0 +1,9 @@
+pkg_dir = fileparts(mfilename('fullpath'));
+addpath(pkg_dir);
+addpath(fullfile(pkg_dir, '+paraxial', '+beams'));
+addpath(fullfile(pkg_dir, '+paraxial', '+parameters'));
+addpath(fullfile(pkg_dir, '+paraxial', '+computation'));
+addpath(fullfile(pkg_dir, '+paraxial', '+propagation', '+field'));
+addpath(fullfile(pkg_dir, '+paraxial', '+propagation', '+rays'));
+addpath(fullfile(pkg_dir, '+paraxial', '+visualization'));
+addpath(fullfile(pkg_dir, 'ParaxialBeams'));

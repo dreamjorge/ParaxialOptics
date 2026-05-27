@@ -43,6 +43,6 @@ function install()
     end
 
     fprintf('[ParaxialOptics] v%s installed successfully.\n', ver);
-    fprintf('  Type "help simulation_scripts_version" for version info.\n');
+    fprintf('  Type "help paraxial.simulation_scripts_version" for version info.\n');
     fprintf('  See README.md for usage examples.\n');
 end

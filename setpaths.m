@@ -33,15 +33,15 @@ function setpaths()
     addpath(fullfile(scriptPath, '+paraxial', '+propagation', '+rays'));
     addpath(fullfile(scriptPath, '+paraxial', '+visualization'));
     % Utilities
-    addpath(fullfile(scriptPath, 'ParaxialBeams'));
-    addpath(fullfile(scriptPath, 'ParaxialBeams', 'Addons'));
-    addpath(fullfile(scriptPath, 'ParaxialBeams', 'Addons', 'Plots_Functions'));
+    addIfDir(fullfile(scriptPath, 'ParaxialBeams'));
+    addIfDir(fullfile(scriptPath, 'ParaxialBeams', 'Addons'));
+    addIfDir(fullfile(scriptPath, 'ParaxialBeams', 'Addons', 'Plots_Functions'));
 
     %% Legacy compatibility aliases
-    addpath(fullfile(scriptPath, 'legacy', 'compat'));
+    addIfDir(fullfile(scriptPath, 'legacy', 'compat'));
 
     %% Tests
-    addpath(fullfile(scriptPath, 'tests'));
+    addIfDir(fullfile(scriptPath, 'tests'));
 
     %% Legacy library structure (src/) — USO RESTRINGIDO
     % Solo necesario para correr scripts heredados o en sesiones de migración.
@@ -55,4 +55,10 @@ function setpaths()
     % addpath(fullfile(scriptPath, 'src', 'visualization'));
 
     fprintf('Path configurado para ParaxialOptics (solo +paraxial/). Legacy src/ solo habilitar si es estrictamente necesario.\n');
+end
+
+function addIfDir(pathName)
+    if exist(pathName, 'dir')
+        addpath(pathName);
+    end
 end

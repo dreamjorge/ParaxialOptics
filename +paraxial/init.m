@@ -32,16 +32,27 @@ function ver = simulation_scripts_version()
     % simulation_scripts_version - Get ParaxialOptics version
     %
     % Usage:
-    %   ver = simulation_scripts_version()
+    %   ver = paraxial.simulation_scripts_version()
     %
     % Output:
-    %   ver - version string from Git tag (e.g. 'v2.0.0' or 'v2.0.0-3-gabc1234'
-    %        if the commit is not an exact tag), '0.0.0-unknown' if Git is unavailable
+    %   ver - version string from Git tag, package DESCRIPTION metadata,
+    %        or '0.0.0-unknown' if unavailable.
 
     [status, result] = system('git describe --tags --match "v*" --always');
     if status == 0
         ver = strtrim(result);
-    else
-        ver = '0.0.0-unknown';
+        return;
     end
+
+    descriptionPath = fullfile(fileparts(fileparts(mfilename('fullpath'))), 'DESCRIPTION');
+    if exist(descriptionPath, 'file')
+        content = fileread(descriptionPath);
+        token = regexp(content, '(?m)^Version:\s*([^\r\n]+)', 'tokens', 'once');
+        if ~isempty(token)
+            ver = ['v' strtrim(token{1})];
+            return;
+        end
+    end
+
+    ver = '0.0.0-unknown';
 end

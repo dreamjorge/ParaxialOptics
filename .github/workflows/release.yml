@@ -31,13 +31,7 @@ jobs:
         run: |
           set -o pipefail
           VERSION=${GITHUB_REF#refs/tags/v}
-          bash ./tools/stage_release_package.sh "$PWD/build/release-staging"
-          cd build/release-staging
-          sed "s/__VERSION__/${VERSION}/g" DESCRIPTION > _tmp_DESCRIPTION
-          mv _tmp_DESCRIPTION DESCRIPTION
-          octave --no-gui --eval "pkg build DESCRIPTION"
-          mv simulation_scripts-${VERSION}.tar.gz "$GITHUB_WORKSPACE/"
-          ls -lh "$GITHUB_WORKSPACE/simulation_scripts-${VERSION}.tar.gz"
+          bash ./tools/build_octave_package.sh "$VERSION" "$GITHUB_WORKSPACE/simulation_scripts-${VERSION}.tar.gz"
 
       - name: Upload Octave package
         uses: actions/upload-artifact@v4

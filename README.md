@@ -229,7 +229,7 @@ CI uses `tests/portable_runner.m` and fails on non-zero exit code.
 ## Version
 
 ```matlab
-ver = simulation_scripts_version()
+ver = paraxial.simulation_scripts_version()
 % Returns 'v1.0.0' or 'v1.0.0-3-gabc1234' if dirty
 ```
 
