@@ -187,12 +187,42 @@ classdef BeamFactory
             %
             % Note: exist('package.class', 'class') does not work in Octave
             % for +package directories, so we use which() instead.
+            BeamFactory.ensureCanonicalPackageParentOnPath();
             resolved = which(className);
             if isempty(resolved)
                 exists = false;
             else
                 % Class found — check if it's from +paraxial/ (canonical)
                 exists = ~isempty(strfind(resolved, '+paraxial'));
+            end
+        end
+
+        function ensureCanonicalPackageParentOnPath()
+            % ensureCanonicalPackageParentOnPath - Add package parent if needed.
+            %
+            % Octave package loading may add ParaxialBeams/ without keeping the
+            % package root on the path.  +paraxial/ classes require their parent
+            % directory, so recover it relative to this factory when possible.
+            factoryPath = which('BeamFactory');
+            if isempty(factoryPath)
+                return
+            end
+
+            paraxialBeamsDir = fileparts(factoryPath);
+            candidateRoot = fileparts(paraxialBeamsDir);
+            if exist(fullfile(candidateRoot, '+paraxial'), 'dir') && ~BeamFactory.pathContains(candidateRoot)
+                path(candidateRoot, path);
+            end
+        end
+
+        function present = pathContains(pathEntry)
+            entries = strsplit(path, pathsep);
+            present = false;
+            for idx = 1:numel(entries)
+                if strcmp(entries{idx}, pathEntry)
+                    present = true;
+                    return
+                end
             end
         end
     end

@@ -1,5 +1,8 @@
 pkg_dir = fileparts(mfilename('fullpath'));
-addpath(pkg_dir);
+% Octave needs the implementation folders for unqualified superclass
+% references inside the current v1.x compatibility layer.  BeamFactory
+% dynamically adds pkg_dir as +paraxial parent before resolving canonical
+% package classes.
 addpath(fullfile(pkg_dir, '+paraxial', '+beams'));
 addpath(fullfile(pkg_dir, '+paraxial', '+parameters'));
 addpath(fullfile(pkg_dir, '+paraxial', '+computation'));
