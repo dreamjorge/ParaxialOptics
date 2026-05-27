@@ -6,6 +6,7 @@ All notable changes to this project are documented in this file.
 
 ### Changed
 - Build release packages from an explicit allowlist to exclude internal process and agent metadata.
+- Make MATLAB toolbox generation optional in release CI when no MATLAB license is available.
 - Clarify canonical `+paraxial/` usage while preserving legacy compatibility surfaces.
 
 ### Removed

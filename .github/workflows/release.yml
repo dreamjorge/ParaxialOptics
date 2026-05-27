@@ -31,7 +31,7 @@ jobs:
         run: |
           set -o pipefail
           VERSION=${GITHUB_REF#refs/tags/v}
-          ./tools/stage_release_package.sh "$PWD/build/release-staging"
+          bash ./tools/stage_release_package.sh "$PWD/build/release-staging"
           cd build/release-staging
           sed "s/__VERSION__/${VERSION}/g" DESCRIPTION > _tmp_DESCRIPTION
           mv _tmp_DESCRIPTION DESCRIPTION
@@ -51,6 +51,7 @@ jobs:
     name: Build MATLAB Toolbox
     runs-on: ubuntu-latest
     timeout-minutes: 40
+    if: ${{ vars.ENABLE_MATLAB_RELEASE == 'true' }}
     permissions:
       contents: read
     steps:
@@ -71,7 +72,7 @@ jobs:
       - name: Build .mltbx toolbox
         run: |
           VERSION=${GITHUB_REF#refs/tags/v}
-          ./tools/stage_release_package.sh "$PWD/build/release-staging"
+          bash ./tools/stage_release_package.sh "$PWD/build/release-staging"
           matlab -batch "matlab.addons.createToolbox(fullfile(pwd, 'build', 'release-staging'), 'OutputFile', fullfile(pwd, ['simulation_scripts-${VERSION}.mltbx']), 'ProductName', 'Simulation_Scripts', 'ProductAuthor', 'Ugalde-Ontiveros J.A.', 'ProductVersion', '${VERSION}', 'ProductDescription', 'Paraxial beam propagation and wavefront analysis'); disp('Toolbox created successfully');"
           ls -lh simulation_scripts-*.mltbx
 
@@ -87,7 +88,7 @@ jobs:
     name: Create GitHub Release
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    needs: [build-octave, build-matlab]
+    needs: [build-octave]
     permissions:
       contents: write
     steps:
@@ -97,8 +98,9 @@ jobs:
           name: octave-package
           path: artifacts
 
-      - name: Download MATLAB toolbox
+      - name: Download MATLAB toolbox if available
         uses: actions/download-artifact@v4
+        continue-on-error: true
         with:
           name: matlab-toolbox
           path: artifacts

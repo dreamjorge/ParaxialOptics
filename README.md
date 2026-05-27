@@ -21,8 +21,8 @@ GitHub Actions is the canonical CI system for this repository. The active workfl
 
 Active workflows:
 - `.github/workflows/octave.yml` — Octave portable tests.
-- `.github/workflows/matlab.yml` — MATLAB portable tests.
-- `.github/workflows/release.yml` — Package generation on `v*` tags.
+- `.github/workflows/matlab.yml` — MATLAB portable tests when a MATLAB license is available.
+- `.github/workflows/release.yml` — Octave package generation on `v*` tags; MATLAB toolbox generation is optional and requires enabling `ENABLE_MATLAB_RELEASE` with a valid MATLAB license.
 
 ## Project Structure
 
@@ -60,7 +60,7 @@ Simulation_Scripts/
 pkg install 'https://github.com/dreamjorge/Simulation_Scripts/releases/latest/download/simulation_scripts-1.0.0.tar.gz'
 ```
 
-**MATLAB:** Double-click the `.mltbx` from [releases](https://github.com/dreamjorge/Simulation_Scripts/releases).
+**MATLAB:** When an `.mltbx` artifact is available in [releases](https://github.com/dreamjorge/Simulation_Scripts/releases), double-click it to install. Without a MATLAB CI license, use the manual setup below.
 
 ### Manual Setup
 
