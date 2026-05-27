@@ -9,7 +9,7 @@ Paraxial beam propagation and wavefront analysis in GNU Octave and MATLAB.
 
 ## Project Status
 
-**v1.0.0** — First release. `+paraxial/` is the canonical namespace.
+**v1.0.1** — Current release. `+paraxial/` is the canonical namespace.
 
 The release packages are built from an explicit allowlist. Internal planning files, agent/runtime metadata, and OpenSpec process history are not included in user-facing MATLAB/Octave packages.
 
@@ -45,6 +45,9 @@ ParaxialOptics/
 ├── src/                        # Deprecated transition adapters
 ├── docs/
 │   ├── ARCHITECTURE.md         # Architecture documentation
+│   ├── COMPATIBILITY_REDUCTION.md
+│   ├── ADDONS_INVENTORY.md
+│   ├── ADDONS_CLEANUP_READINESS.md
 │   └── ROADMAP.md              # Active roadmap
 ├── setpaths.m                  # Path initialization
 ├── CHANGELOG.md
@@ -57,7 +60,8 @@ ParaxialOptics/
 
 **Octave:**
 ```matlab
-pkg install 'https://github.com/dreamjorge/ParaxialOptics/releases/latest/download/simulation_scripts-1.0.0.tar.gz'
+pkg install 'https://github.com/dreamjorge/ParaxialOptics/releases/latest/download/paraxial_optics-1.0.1.tar.gz'
+pkg load paraxial_optics
 ```
 
 **MATLAB:** When an `.mltbx` artifact is available in [releases](https://github.com/dreamjorge/ParaxialOptics/releases), double-click it to install. Without a MATLAB CI license, use the manual setup below.
@@ -230,7 +234,7 @@ CI uses `tests/portable_runner.m` and fails on non-zero exit code.
 
 ```matlab
 ver = paraxial.simulation_scripts_version()
-% Returns 'v1.0.0' or 'v1.0.0-3-gabc1234' if dirty
+% Returns 'v1.0.1' or the current Git/package version
 ```
 
 ## Compatibility
@@ -246,5 +250,5 @@ See `CHANGELOG.md` for release history.
 
 ## Uninstall
 
-**Octave:** `pkg uninstall simulation_scripts`
+**Octave:** `pkg uninstall paraxial_optics`
 **MATLAB:** `matlab.addons.uninstall('ParaxialOptics')`

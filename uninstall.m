@@ -2,7 +2,7 @@ function uninstall()
     % uninstall - Uninstall ParaxialOptics package
     %
     % This script is called automatically by:
-    %   Octave: pkg uninstall simulation_scripts
+    %   Octave: pkg uninstall paraxial_optics
     %   MATLAB: matlab.addons.uninstall('ParaxialOptics')
     %
     % Or manually:

@@ -1,4 +1,0 @@
-timestamp,mode,scenario,propagator,beam_type,grid_tier,nx,ny,z_final,warmup,repeats,median_runtime_sec,min_runtime_sec,max_runtime_sec
-2026-04-27T23:00:31,quick,gaussian_fft_small,fft,gaussian,small,256,256,0.05,1,3,0.0108208656311,0.0104069709778,0.0116989612579
-2026-04-27T23:00:31,quick,gaussian_analytic_small,analytic,gaussian,small,256,256,0.05,1,3,0.00561094284058,0.00556302070618,0.00563406944275
-2026-04-27T23:01:28,quick,gaussian_raytrace_small,raytrace,gaussian,small,256,256,0.01,1,3,14.0261678696,13.9459769726,14.1437389851

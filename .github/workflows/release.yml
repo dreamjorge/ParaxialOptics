@@ -31,13 +31,13 @@ jobs:
         run: |
           set -o pipefail
           VERSION=${GITHUB_REF#refs/tags/v}
-          bash ./tools/build_octave_package.sh "$VERSION" "$GITHUB_WORKSPACE/simulation_scripts-${VERSION}.tar.gz"
+          bash ./tools/build_octave_package.sh "$VERSION" "$GITHUB_WORKSPACE/paraxial_optics-${VERSION}.tar.gz"
 
       - name: Upload Octave package
         uses: actions/upload-artifact@v4
         with:
           name: octave-package
-          path: simulation_scripts-*.tar.gz
+          path: paraxial_optics-*.tar.gz
           retention-days: 90
 
   # ─── MATLAB Toolbox ────────────────────────────────────────────────────────────
@@ -67,14 +67,14 @@ jobs:
         run: |
           VERSION=${GITHUB_REF#refs/tags/v}
           bash ./tools/stage_release_package.sh "$PWD/build/release-staging"
-          matlab -batch "matlab.addons.createToolbox(fullfile(pwd, 'build', 'release-staging'), 'OutputFile', fullfile(pwd, ['simulation_scripts-${VERSION}.mltbx']), 'ProductName', 'ParaxialOptics', 'ProductAuthor', 'Ugalde-Ontiveros J.A.', 'ProductVersion', '${VERSION}', 'ProductDescription', 'Paraxial beam propagation and wavefront analysis'); disp('Toolbox created successfully');"
-          ls -lh simulation_scripts-*.mltbx
+          matlab -batch "matlab.addons.createToolbox(fullfile(pwd, 'build', 'release-staging'), 'OutputFile', fullfile(pwd, ['paraxial_optics-${VERSION}.mltbx']), 'ProductName', 'ParaxialOptics', 'ProductAuthor', 'Ugalde-Ontiveros J.A.', 'ProductVersion', '${VERSION}', 'ProductDescription', 'Paraxial beam propagation and wavefront analysis'); disp('Toolbox created successfully');"
+          ls -lh paraxial_optics-*.mltbx
 
       - name: Upload MATLAB toolbox
         uses: actions/upload-artifact@v4
         with:
           name: matlab-toolbox
-          path: simulation_scripts-*.mltbx
+          path: paraxial_optics-*.mltbx
           retention-days: 90
 
   # ─── GitHub Release ────────────────────────────────────────────────────────────

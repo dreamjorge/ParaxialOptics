@@ -2,16 +2,18 @@
 
 All notable changes to this project are documented in this file.
 
-## [Unreleased]
+## [v1.0.1] - 2026-05-27
 
 ### Changed
+- Rename the Octave package from `simulation_scripts` to `paraxial_optics`.
+- Build release tarballs as `paraxial_optics-<version>.tar.gz`.
 - Build release packages from an explicit allowlist to exclude internal process and agent metadata.
 - Make MATLAB toolbox generation optional in release CI when no MATLAB license is available.
 - Clarify canonical `+paraxial/` usage while preserving legacy compatibility surfaces.
 
 ### Removed
 - Removed tracked local agent registry metadata from the public repository surface.
-- Archived root-level historical planning notes under `docs/archive/`.
+- Removed internal plans, agent notes, release scratch reports, generated Pages scaffolding, and historical benchmark artifacts from `docs/`.
 
 ## [v1.0.0] - 2026-05-19 — First Release
 

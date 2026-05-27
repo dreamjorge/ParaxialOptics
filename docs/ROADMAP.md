@@ -1,6 +1,6 @@
 # ParaxialOptics Modernization Roadmap
 
-This roadmap tracks the active post-v2 cleanup and modernization work. Historical implementation plans live in `docs/plans/` or archived OpenSpec changes.
+This roadmap tracks public cleanup and modernization work for ParaxialOptics. Internal plans, agent notes, generated site scaffolding, and release scratch reports are intentionally kept out of `docs/` for the v1.0.1 public surface.
 
 ## Current Architecture Direction
 
@@ -15,7 +15,7 @@ This roadmap tracks the active post-v2 cleanup and modernization work. Historica
 
 - Ignore local agent/tooling metadata such as `.opencode/` and `.atl/` unless explicitly promoted to project tooling.
 - Remove stale CI/configuration surfaces that no longer reflect the active workflow.
-- Keep root-level planning documents out of the default public surface; archive historical plans under `docs/archive/`.
+- Keep planning documents, agent notes, release scratch reports, and generated site scaffolding out of the default public documentation surface.
 
 ## Phase 2: Documentation Alignment
 
@@ -50,14 +50,15 @@ Before tagging a release:
 - Keep legacy examples documented as archive/generator/research material.
 - Avoid presenting legacy examples as the default user path.
 
-## Completed Follow-up: `post-v2-modernization-next-steps`
+## Completed Cleanup Baseline
 
-The archived OpenSpec change `openspec/changes/archive/2026-04-30-post-v2-modernization-next-steps/` completed the bounded cleanup wave for:
+The v1.0.x cleanup wave established these public invariants:
 
 - Clarify runner path setup so `+paraxial/` is resolved via the repo root package parent.
 - Keep `src/` paths available only as deprecated/transitional compatibility paths.
 - Inventory `ParaxialBeams/Addons/` before any migration or removal decision.
 - Document compatibility reduction gates before reducing deprecated `src/` behavior.
+- Keep `docs/` focused on public architecture, roadmap, compatibility, and addon policy documents.
 
 ## Explicit Non-Goals
 

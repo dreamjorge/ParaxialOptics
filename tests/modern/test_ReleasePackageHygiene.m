@@ -41,13 +41,19 @@ function failures = test_ReleasePackageHygiene()
         failures = failures + 1;
     end
 
+    publicDocsDir = fullfile(repoRoot, 'docs');
+    internalDocDirs = {'archive', 'internal', 'plans', 'html', 'performance'};
+    for i = 1:numel(internalDocDirs)
+        internalPath = fullfile(publicDocsDir, internalDocDirs{i});
+        if exist(internalPath, 'dir')
+            fprintf('  FAIL: internal docs directory remains public: docs/%s\n', internalDocDirs{i});
+            failures = failures + 1;
+        end
+    end
+
     rootPlan = fullfile(repoRoot, 'plan.md');
-    archivedPlan = fullfile(repoRoot, 'docs', 'archive', 'pre-v1-hardening-plan.md');
     if exist(rootPlan, 'file')
         fprintf('  FAIL: historical plan remains at repository root\n');
-        failures = failures + 1;
-    elseif ~exist(archivedPlan, 'file')
-        fprintf('  FAIL: historical plan was not archived\n');
         failures = failures + 1;
     end
 

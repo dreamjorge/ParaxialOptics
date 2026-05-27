@@ -8,10 +8,10 @@ fi
 
 version="$1"
 root_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-output="${2:-${root_dir}/simulation_scripts-${version}.tar.gz}"
+output="${2:-${root_dir}/paraxial_optics-${version}.tar.gz}"
 work_dir="${root_dir}/build/octave-package"
 stage_dir="${work_dir}/release-staging"
-package_name="simulation_scripts-${version}"
+package_name="paraxial_optics-${version}"
 package_dir="${work_dir}/${package_name}"
 
 rm -rf "$work_dir"

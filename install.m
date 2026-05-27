@@ -2,8 +2,8 @@ function install()
     % install - Install ParaxialOptics package
     %
     % This script is called automatically by:
-    %   Octave: pkg install simulation_scripts-*.tar.gz
-    %   MATLAB: matlab.addons.install('simulation_scripts.mltbx')
+    %   Octave: pkg install paraxial_optics-*.tar.gz
+    %   MATLAB: matlab.addons.install('paraxial_optics.mltbx')
     %
     % Or manually:
     %   octave --eval "install"

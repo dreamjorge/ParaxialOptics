@@ -41,7 +41,6 @@ readmePath = fullfile(repoRoot, 'README.md');
 roadmapPath = fullfile(repoRoot, 'docs', 'ROADMAP.md');
 addonsInventoryPath = fullfile(repoRoot, 'docs', 'ADDONS_INVENTORY.md');
 compatReductionPath = fullfile(repoRoot, 'docs', 'COMPATIBILITY_REDUCTION.md');
-planPath = fullfile(repoRoot, 'docs', 'archive', 'pre-v1-hardening-plan.md');
 portableRunnerPath = fullfile(repoRoot, 'tests', 'portable_runner.m');
 wavefrontTestPath = fullfile(repoRoot, 'tests', 'modern', 'test_Wavefront.m');
 addonsDir = fullfile(repoRoot, 'ParaxialBeams', 'Addons');
@@ -64,11 +63,6 @@ if exist(compatReductionPath, 'file')
     compatReductionContent = fileread(compatReductionPath);
 else
     compatReductionContent = '';
-end
-if exist(planPath, 'file')
-    planContent = fileread(planPath);
-else
-    planContent = '';
 end
 if exist(portableRunnerPath, 'file')
     portableRunnerContent = fileread(portableRunnerPath);
@@ -154,9 +148,9 @@ else
     failed = failed + 1;
 end
 
-if ~isempty(strfind(roadmapContent, 'post-v2-modernization-next-steps')) && ...
+if ~isempty(strfind(roadmapContent, 'Completed Cleanup Baseline')) && ...
    ~isempty(strfind(roadmapContent, 'No removal of `src/` without a dedicated migration SDD')) && ...
-   ~isempty(strfind(planContent, 'Historical'))
+   ~isempty(strfind(roadmapContent, 'Keep `docs/` focused on public architecture'))
     fprintf('  PASS: roadmap owns active modernization next steps\n');
     passed = passed + 1;
 else
