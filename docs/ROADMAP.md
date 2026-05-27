@@ -63,5 +63,5 @@ The v1.0.x cleanup wave established these public invariants:
 ## Explicit Non-Goals
 
 - No beam physics rewrites in cleanup-only changes.
-- No removal of `src/` without a dedicated migration SDD.
+- No removal of `src/` without a dedicated compatibility change.
 - No deletion of historical examples without usage review and compatibility policy updates.

@@ -149,7 +149,7 @@ else
 end
 
 if ~isempty(strfind(roadmapContent, 'Completed Cleanup Baseline')) && ...
-   ~isempty(strfind(roadmapContent, 'No removal of `src/` without a dedicated migration SDD')) && ...
+   ~isempty(strfind(roadmapContent, 'No removal of `src/` without a dedicated compatibility change')) && ...
    ~isempty(strfind(roadmapContent, 'Keep `docs/` focused on public architecture'))
     fprintf('  PASS: roadmap owns active modernization next steps\n');
     passed = passed + 1;
@@ -200,7 +200,7 @@ end
 
 if ~isempty(strfind(compatReductionContent, 'Cleanup-only changes MUST NOT remove `src/`')) && ...
    ~isempty(strfind(compatReductionContent, 'tests/legacy_compat/')) && ...
-   ~isempty(strfind(compatReductionContent, 'Dedicated SDD change'))
+   ~isempty(strfind(compatReductionContent, 'Dedicated compatibility change'))
     fprintf('  PASS: compatibility reduction plan defines src/ migration gates\n');
     passed = passed + 1;
 else
@@ -294,7 +294,7 @@ else
 end
 
 if ~isempty(strfind(readinessContent, 'License and Origin Review Required')) && ...
-   ~isempty(strfind(readinessContent, 'Required Follow-up SDDs')) && ...
+   ~isempty(strfind(readinessContent, 'Required Follow-up Cleanup Changes')) && ...
    ~isempty(strfind(readinessContent, 'Keep During Compatibility Window'))
     fprintf('  PASS: addons cleanup readiness defines review gates\n');
     passed = passed + 1;

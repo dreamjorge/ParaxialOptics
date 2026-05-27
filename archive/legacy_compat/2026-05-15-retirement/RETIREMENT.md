@@ -40,7 +40,7 @@ If you need to re-validate the alias removal migration in the future:
 - `tests/legacy_compat/` folder removed from repo
 - `src/` path now conditional (commented by default, opt-in only)
 - Modern API (`+paraxial/`, `BeamFactory.create()`) is the default entrypoint
-- See `openspec/changes/2026-05-15-modernization-migration/` for migration SDD artifacts
+- See git history before the public release cleanup for migration planning artifacts.
 
 ## Related Documentation
 

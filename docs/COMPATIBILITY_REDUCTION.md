@@ -23,8 +23,8 @@ This document defines gates for any future reduction of deprecated `src/` behavi
    - Document replacement imports/construction calls.
    - Mark removed aliases or adapters with clear before/after examples.
 
-4. **Dedicated SDD change**
-   - Create a separate OpenSpec change for any removal or behavior reduction.
+4. **Dedicated compatibility change**
+   - Track any removal or behavior reduction in a focused issue or pull request with explicit rationale.
    - Include rollback instructions and release-note requirements.
 
 5. **Release coordination**

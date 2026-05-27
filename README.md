@@ -13,7 +13,7 @@ Documentation: https://dreamjorge.github.io/ParaxialOptics/
 
 **v1.0.1** — Current release. `+paraxial/` is the canonical namespace.
 
-The release packages are built from an explicit allowlist. Internal planning files, agent/runtime metadata, and OpenSpec process history are not included in user-facing MATLAB/Octave packages.
+The release packages are built from an explicit allowlist. Internal planning files, agent/runtime metadata, and historical process artifacts are not included in user-facing MATLAB/Octave packages.
 
 `src/` is deprecated and only kept for backward compatibility during the Strangler Fig migration. Use `BeamFactory.create()` or direct `+paraxial/` classes.
 

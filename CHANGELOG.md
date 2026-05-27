@@ -7,6 +7,9 @@ All notable changes to this project are documented in this file.
 ### Added
 - Add GitHub Pages documentation with getting started, examples, and API overview pages.
 
+### Removed
+- Remove tracked OpenSpec process artifacts from the public repository surface.
+
 ### Changed
 - Label generated README figure color bars with physical/plot units: normalized intensity in arbitrary units and phase in radians.
 
@@ -52,7 +55,7 @@ All notable changes to this project are documented in this file.
 
 ### Removed
 - Stale CircleCI configuration.
-- Plans and migration docs moved to archive/openspec.
+- Plans and migration docs moved to internal archives during pre-release cleanup.
 - AI agent directories (.atl, .pi, .opencode, .worktrees, .agent).
 
 ## [Unreleased] — Historical

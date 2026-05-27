@@ -9,7 +9,7 @@ This inventory classifies `ParaxialBeams/Addons/` before any cleanup, migration,
 | `runtime-required` | Used by current source/tests or legacy compatibility behavior. |
 | `plotting-only` | Used for figures, visualization, examples, or research scripts. |
 | `vendored-third-party` | Likely external helper; preserve until origin/license is confirmed. |
-| `removable-candidate` | No current evidence of use; requires follow-up SDD before deletion. |
+| `removable-candidate` | No current evidence of use; requires a follow-up compatibility change before deletion. |
 | `needs-investigation` | Usage/origin unclear; do not remove. |
 
 ## Top-level Addons
@@ -45,6 +45,6 @@ This inventory classifies `ParaxialBeams/Addons/` before any cleanup, migration,
 
 ## Policy
 
-- `removable-candidate` and `needs-investigation` entries MUST remain present until a follow-up SDD change proves they can be removed safely.
+- `removable-candidate` and `needs-investigation` entries MUST remain present until a follow-up compatibility change proves they can be removed safely.
 - Runtime and plotting classifications are descriptive, not a promise that the API is modern.
 - Vendored-third-party entries need origin/license review before relocation or redistribution decisions.
