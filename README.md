@@ -95,6 +95,14 @@ prop = FFTPropagator(grid, 632.8e-9);
 field_z = prop.propagate(beam, 0.1);
 ```
 
+## Visual Examples
+
+These figures are generated with `tools/generate_readme_figures.m`, so the README visuals stay tied to executable optics code.
+
+| Gaussian intensity | Hermite/Laguerre modes | Wavefront phase |
+|---|---|---|
+| ![Gaussian beam intensity](docs/assets/gaussian_beam_intensity.png) | ![Hermite and Laguerre modes](docs/assets/hermite_laguerre_modes.png) | ![Wavefront phase](docs/assets/wavefront_phase.png) |
+
 ## Supported Beam Types
 
 | Type | Class | Parameters |

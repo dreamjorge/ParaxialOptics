@@ -4,6 +4,9 @@ All notable changes to this project are documented in this file.
 
 ## [v1.0.1] - 2026-05-27
 
+### Added
+- Add reproducible README figures for Gaussian intensity, Hermite/Laguerre modes, and wavefront phase.
+
 ### Changed
 - Rename the Octave package from `simulation_scripts` to `paraxial_optics`.
 - Build release tarballs as `paraxial_optics-<version>.tar.gz`.
