@@ -1,6 +1,6 @@
 # +paraxial Package
 
-Canonical MATLAB package namespace for Simulation_Scripts beam physics library.
+Canonical MATLAB package namespace for ParaxialOptics beam physics library.
 
 ## Status
 

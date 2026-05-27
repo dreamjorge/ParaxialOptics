@@ -1,5 +1,5 @@
 % Compatible with GNU Octave and MATLAB
-% Coverage Report - Simulation_Scripts
+% Coverage Report - ParaxialOptics
 % Calculates approximate coverage based on functions tested
 
 fprintf('=== Coverage Report ===\n\n');

@@ -14,7 +14,7 @@
 %% QUICK START
 %% ----------
 %% Run a demo:
-%%   cd /path/to/Simulation_Scripts
+%%   cd /path/to/ParaxialOptics
 %%   octave --no-gui --eval "run('+paraxial/+applications/+demos/DemoGaussian.m')"
 %%
 %% Run propagation:
@@ -87,7 +87,7 @@
 %%
 %% VERSION
 %% -------
-%% This package is part of the Simulation_Scripts library.
+%% This package is part of the ParaxialOptics library.
 %% Version: see +paraxial/simulation_scripts_version.m
 %%
 %% SEE ALSO

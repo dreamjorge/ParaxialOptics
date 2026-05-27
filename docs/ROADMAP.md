@@ -1,4 +1,4 @@
-# Simulation_Scripts Modernization Roadmap
+# ParaxialOptics Modernization Roadmap
 
 This roadmap tracks the active post-v2 cleanup and modernization work. Historical implementation plans live in `docs/plans/` or archived OpenSpec changes.
 

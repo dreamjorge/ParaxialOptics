@@ -1,6 +1,6 @@
-# Borrador de LinkedIn: Simulation_Scripts v1.0.0
+# Borrador de LinkedIn: ParaxialOptics v1.0.0
 
-Estoy preparando el primer release público de `Simulation_Scripts`, una librería MATLAB/GNU Octave para propagación paraxial, modos Gaussianos, Hermite-Gaussianos, Laguerre-Gaussianos, haces tipo Hankel y análisis de frente de onda.
+Estoy preparando el primer release público de `ParaxialOptics`, una librería MATLAB/GNU Octave para propagación paraxial, modos Gaussianos, Hermite-Gaussianos, Laguerre-Gaussianos, haces tipo Hankel y análisis de frente de onda.
 
 Más que anunciar otro repositorio, quiero compartir una idea con la comunidad de óptica: necesitamos recuperar el pragmatismo de codificar en ciencia.
 
@@ -16,4 +16,4 @@ Si trabajas en óptica, fotónica o simulación científica y tienes scripts que
 
 ## Optional English summary
 
-I am preparing the first public release of `Simulation_Scripts`, a MATLAB/GNU Octave library for paraxial beam propagation and wavefront analysis. The goal is not only to share code, but to promote a pragmatic way of writing scientific software: tested APIs, reproducible examples, clear compatibility boundaries, and packages that other researchers can actually run.
+I am preparing the first public release of `ParaxialOptics`, a MATLAB/GNU Octave library for paraxial beam propagation and wavefront analysis. The goal is not only to share code, but to promote a pragmatic way of writing scientific software: tested APIs, reproducible examples, clear compatibility boundaries, and packages that other researchers can actually run.

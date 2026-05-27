@@ -1,10 +1,10 @@
 % Compatible with GNU Octave and MATLAB
-% Test Suite Runner - Simulation_Scripts (wrapper)
+% Test Suite Runner - ParaxialOptics (wrapper)
 % Delegates to portable_runner() as the canonical implementation.
 
 scriptPath = fileparts(mfilename('fullpath'));
 
-fprintf('=== Simulation_Scripts Test Suite (Portable Wrapper) ===\n\n');
+fprintf('=== ParaxialOptics Test Suite (Portable Wrapper) ===\n\n');
 
 try
     total_failed = portable_runner();

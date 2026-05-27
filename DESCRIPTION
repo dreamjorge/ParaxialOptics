@@ -4,6 +4,6 @@ version=1.0.0
 author=Ugalde-Ontiveros J.A.
 maintainer=jorge-kun@live.com
 description=Paraxial beam propagation and wavefront analysis in Octave and MATLAB
-homepage=https://github.com/dreamjorge/Simulation_Scripts
+homepage=https://github.com/dreamjorge/ParaxialOptics
 license=MIT
 depends=

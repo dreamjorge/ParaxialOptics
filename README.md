@@ -1,11 +1,11 @@
-# Simulation_Scripts
+# ParaxialOptics
 
 Paraxial beam propagation and wavefront analysis in GNU Octave and MATLAB.
 
 **Author:** Ugalde-Ontiveros J.A.
 
-[![Octave CI](https://github.com/dreamjorge/Simulation_Scripts/actions/workflows/octave.yml/badge.svg)](https://github.com/dreamjorge/Simulation_Scripts/actions/workflows/octave.yml)
-[![MATLAB CI](https://github.com/dreamjorge/Simulation_Scripts/actions/workflows/matlab.yml/badge.svg)](https://github.com/dreamjorge/Simulation_Scripts/actions/workflows/matlab.yml)
+[![Octave CI](https://github.com/dreamjorge/ParaxialOptics/actions/workflows/octave.yml/badge.svg)](https://github.com/dreamjorge/ParaxialOptics/actions/workflows/octave.yml)
+[![MATLAB CI](https://github.com/dreamjorge/ParaxialOptics/actions/workflows/matlab.yml/badge.svg)](https://github.com/dreamjorge/ParaxialOptics/actions/workflows/matlab.yml)
 
 ## Project Status
 
@@ -27,7 +27,7 @@ Active workflows:
 ## Project Structure
 
 ```
-Simulation_Scripts/
+ParaxialOptics/
 ├── +paraxial/                  # Canonical package namespace
 │   ├── +beams/                 # Beam classes
 │   ├── +parameters/            # Parameter classes
@@ -57,10 +57,10 @@ Simulation_Scripts/
 
 **Octave:**
 ```matlab
-pkg install 'https://github.com/dreamjorge/Simulation_Scripts/releases/latest/download/simulation_scripts-1.0.0.tar.gz'
+pkg install 'https://github.com/dreamjorge/ParaxialOptics/releases/latest/download/simulation_scripts-1.0.0.tar.gz'
 ```
 
-**MATLAB:** When an `.mltbx` artifact is available in [releases](https://github.com/dreamjorge/Simulation_Scripts/releases), double-click it to install. Without a MATLAB CI license, use the manual setup below.
+**MATLAB:** When an `.mltbx` artifact is available in [releases](https://github.com/dreamjorge/ParaxialOptics/releases), double-click it to install. Without a MATLAB CI license, use the manual setup below.
 
 ### Manual Setup
 
@@ -247,4 +247,4 @@ See `CHANGELOG.md` for release history.
 ## Uninstall
 
 **Octave:** `pkg uninstall simulation_scripts`
-**MATLAB:** `matlab.addons.uninstall('Simulation_Scripts')`
+**MATLAB:** `matlab.addons.uninstall('ParaxialOptics')`

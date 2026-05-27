@@ -1,4 +1,4 @@
-# Simulation_Scripts Architecture
+# ParaxialOptics Architecture
 
 ## Overview
 
@@ -170,7 +170,7 @@ Every `ParaxialBeam` subclass MUST implement:
 ## Directory Structure
 
 ```
-Simulation_Scripts/
+ParaxialOptics/
 ├── +paraxial/                  ← Canonical package namespace
 │   ├── +beams/
 │   ├── +parameters/

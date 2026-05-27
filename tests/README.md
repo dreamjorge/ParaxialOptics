@@ -1,4 +1,4 @@
-# Simulation_Scripts Test Suite
+# ParaxialOptics Test Suite
 
 This directory contains tests for the ParaxialBeams simulation library.
 

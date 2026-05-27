@@ -1,5 +1,5 @@
 function install()
-    % install - Install Simulation_Scripts package
+    % install - Install ParaxialOptics package
     %
     % This script is called automatically by:
     %   Octave: pkg install simulation_scripts-*.tar.gz
@@ -42,7 +42,7 @@ function install()
         end
     end
 
-    fprintf('[Simulation_Scripts] v%s installed successfully.\n', ver);
+    fprintf('[ParaxialOptics] v%s installed successfully.\n', ver);
     fprintf('  Type "help simulation_scripts_version" for version info.\n');
     fprintf('  See README.md for usage examples.\n');
 end

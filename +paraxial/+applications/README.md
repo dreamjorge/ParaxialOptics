@@ -32,7 +32,7 @@ Comprehensive collection of application scripts for beam propagation, analysis, 
 
 ```matlab
 % Run Gaussian beam demo
-cd Simulation_Scripts
+cd ParaxialOptics
 run('+paraxial/+applications/+demos/DemoGaussian.m')
 ```
 
@@ -186,7 +186,7 @@ metrics = wf.getMetrics(36);
 
 ## Version
 
-Part of the Simulation_Scripts library.
+Part of the ParaxialOptics library.
 See `+paraxial/simulation_scripts_version.m` for version information.
 
 ## See Also

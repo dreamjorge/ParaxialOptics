@@ -1,4 +1,4 @@
-% Extended test suite for Simulation_Scripts
+% Extended test suite for ParaxialOptics
 % Run with: matlab -batch "runtests('tests/')"
 
 %% PhysicalConstants tests

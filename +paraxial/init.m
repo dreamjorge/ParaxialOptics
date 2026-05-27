@@ -29,7 +29,7 @@ function init()
 end
 
 function ver = simulation_scripts_version()
-    % simulation_scripts_version - Get Simulation_Scripts version
+    % simulation_scripts_version - Get ParaxialOptics version
     %
     % Usage:
     %   ver = simulation_scripts_version()

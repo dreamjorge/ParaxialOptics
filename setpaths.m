@@ -1,5 +1,5 @@
 function setpaths()
-    % setpaths - Initialize path for Simulation_Scripts
+    % setpaths - Initialize path for ParaxialOptics
     % Call this function before using the library, or add the
     % individual directories to your path.
     %
@@ -54,5 +54,5 @@ function setpaths()
     % addpath(fullfile(scriptPath, 'src', 'propagation', 'rays'));
     % addpath(fullfile(scriptPath, 'src', 'visualization'));
 
-    fprintf('Path configurado para Simulation_Scripts (solo +paraxial/). Legacy src/ solo habilitar si es estrictamente necesario.\n');
+    fprintf('Path configurado para ParaxialOptics (solo +paraxial/). Legacy src/ solo habilitar si es estrictamente necesario.\n');
 end
